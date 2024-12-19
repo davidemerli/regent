@@ -33,6 +33,10 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
+  spec.add_dependency "ruby-openai", "~> 7.3.1"
+  spec.add_dependency "langchainrb", "~> 0.19.2"
+  spec.add_dependency "tty-spinner", "~> 0.9.3"
+  spec.add_dependency "pastel", "~> 0.8.0"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

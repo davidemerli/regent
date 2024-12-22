@@ -2,7 +2,7 @@
 
 RSpec.describe Regent::Agent, :vcr do
   let(:llm) { Langchain::LLM::OpenAI.new(api_key: ENV['OPENAI_API_KEY']) }
-  let(:agent) { Regent::Agent.new(llm) }
+  let(:agent) { Regent::Agent.new(llm: llm) }
 
 
   context "without a tool" do
@@ -45,7 +45,7 @@ RSpec.describe Regent::Agent, :vcr do
       end
     end
 
-    let(:agent) { Regent::Agent.new(llm, [PriceTool.new('price_tool', 'Get the price of cryptocurrencies')]) }
+    let(:agent) { Regent::Agent.new(llm: llm, tools: [PriceTool.new(name: 'price_tool', description: 'Get the price of cryptocurrencies')]) }
 
     it "answers a question with a tool" do
       expect(agent.execute("What is the price of Bitcoin?")).to eq("The price of Bitcoin is $107,000.")

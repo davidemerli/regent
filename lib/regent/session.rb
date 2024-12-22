@@ -22,7 +22,7 @@ module Regent
     end
 
     def continue(type, options = {})
-      @spans << Span.new(self, type, options)
+      @spans << Span.new(session: self, type: type, arguments: options)
       result = spans.last.execute
       result
     end
@@ -39,6 +39,7 @@ module Regent
     end
 
     def duration
+      @end_time = Time.now if @end_time.nil?
       end_time - start_time
     end
 

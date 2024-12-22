@@ -27,7 +27,6 @@ RSpec.configure do |config|
   end
 
   config.around(:each, :vcr) do |example|
-    puts "example.metadata: #{cassette}"
     VCR.use_cassette(cassette, record: :new_episodes) { example.call }
   end
 end

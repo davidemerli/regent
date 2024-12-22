@@ -43,10 +43,12 @@ module Regent
       attr_reader :tools, :session, :max_iterations
 
       def reason(task)
-         session.messages = [
+        session.messages = [
           {role: :system, content: SYSTEM_PROMPT % { tools: tool_names }},
           {role: :user, content: task}
         ]
+
+        session.continue(Span::Type::INPUT, { content: task })
 
         max_iterations.times do |i|
           content = session.continue(Span::Type::LLM_CALL, { messages: session.messages, params: { stop: [STOP_SEQUENCE] }})
@@ -56,7 +58,7 @@ module Regent
           return success_answer(content.split(ANSWER_SEQUENCE)[1].strip) if content.include?(ANSWER_SEQUENCE)
 
           if content.include?(ACTION_SEQUENCE)
-            tool, argument = lookup_tool(content)
+            tool, argument = lookup_tool(content.gsub(STOP_SEQUENCE, ""))
 
             return session.complete unless tool
 
@@ -75,17 +77,19 @@ module Regent
       end
 
       def error_answer(content)
-        session.complete(Span::Type::ANSWER, { type: :error, content: content })
+        session.complete(Span::Type::ANSWER, { type: :failure, content: content })
       end
 
       def tool_names
-        tools.map(&:name).join(", ")
+        tools.map do |tool|
+          "#{tool.name} - #{tool.description}"
+        end.join("\n")
       end
 
       def lookup_tool(content)
         tool_name, argument = parse_tool_signature(content)
         tool = @tools.find { |tool| tool.name.downcase == tool_name.downcase }
-        session.continue(Span::Type::ANSWER, { type: :error, content: "No matching tool found for: #{tool_name}" }) unless tool
+        session.continue(Span::Type::ANSWER, { type: :failure, content: "No matching tool found for: #{tool_name}" }) unless tool
 
         [tool, argument]
       end
@@ -96,7 +100,7 @@ module Regent
 
         parts = action.split('|', 2).map(&:strip)
         tool_name = parts[0]
-        argument = parts[1]
+        argument = parts[1].gsub('"', '')
 
         # Handle cases where argument is nil, empty, or only whitespace
         argument = nil if argument.nil? || argument.empty?

@@ -2,36 +2,58 @@
 
 module Regent
   class Logger
+    COLORS = %i[dim green yellow red blue cyan clear].freeze
+
     def initialize
       @pastel = Pastel.new
-      @spinner = TTY::Spinner.new("#{@pastel.cyan("[:spinner] :title")}", format: :dots)
+      @spinner = TTY::Spinner.new("#{spinner_format} :title", format: :dots)
+      @nested_spinner = TTY::Spinner.new("#{dim(" ├──")}#{spinner_format} :title", format: :dots)
     end
 
-    attr_reader :spinner
+    attr_reader :spinner, :nested_spinner
 
-    def start
-      spinner.auto_spin
+    def info(label:, message:, duration: nil, type: nil, meta: nil, top_level: false)
+      current_spinner = top_level ? spinner : nested_spinner
+
+      current_spinner.update(title: format_message(label, message, duration, type, meta))
+      current_spinner
     end
 
-    def stop
-      spinner.stop
+    def start(**args)
+      info(**args).auto_spin
     end
 
-    def log(message)
-      if $stdout.isatty
-        spinner.update(title: message)
-        start unless spinner.spinning?
-      else
-        puts message
+    def success(**args)
+      info(**args).success
+    end
+
+    def error(**args)
+      info(**args).error
+    end
+
+    private
+
+    def format_message(label, message, duration, type, meta)
+      parts = []
+      parts << "#{dim("[")}#{cyan(label)}"
+      parts << "#{dim(" ❯")} #{yellow(type)}" if type
+      parts << dim("]")
+      parts << dim("[#{meta}]") if meta
+      parts << dim("[#{duration.round(2)}s]") if duration
+      parts << dim(":")
+      parts << clear(" #{message}")
+
+      parts.join
+    end
+
+    def spinner_format
+      "#{dim("[")}#{green(":spinner")}#{dim("]")}"
+    end
+
+    COLORS.each do |color|
+      define_method(color) do |message|
+        @pastel.send(color, message)
       end
-    end
-
-    def success(message)
-      spinner.success(@pastel.cyan(message))
-    end
-
-    def error(message)
-      spinner.error(@pastel.red(message))
     end
   end
 end

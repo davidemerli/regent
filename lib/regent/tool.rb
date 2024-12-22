@@ -1,6 +1,5 @@
 module Regent
   class Tool
-
     def initialize(name, description)
       @name = name
       @description = description

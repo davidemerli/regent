@@ -1,6 +1,6 @@
 module Regent
   class Span
-    attr_reader :name, :arguments, :output
+    include Concerns::Identifiable
 
     module Type
       LLM_CALL = 'llm_call'.freeze
@@ -18,6 +18,8 @@ module Regent
     end
 
     def initialize(session, type, arguments)
+      super()
+
       @session = session
       @logger = Logger.new
       @type = type
@@ -26,7 +28,7 @@ module Regent
       @output = nil
     end
 
-    attr_reader :type, :start_time, :end_time
+    attr_reader :name, :arguments, :output, :type, :start_time, :end_time
 
     def execute
       @status = :running
@@ -47,6 +49,11 @@ module Regent
 
     def duration
       @end_time - @start_time
+    end
+
+    alias_method :inspect!, :inspect
+    def inspect
+      self.to_s
     end
 
     private

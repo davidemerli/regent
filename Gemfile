@@ -11,3 +11,8 @@ gem "rspec", "~> 3.0"
 gem "ruby-openai", "~> 7.3.1"
 gem "tty-spinner", "~> 0.9.3"
 gem "pastel", "~> 0.8.0"
+
+group :test do
+  gem "vcr", "~> 6.2"
+  gem "webmock", "~> 3.19"
+end

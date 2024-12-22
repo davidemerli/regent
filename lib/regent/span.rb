@@ -3,6 +3,7 @@
 module Regent
   class Span
     include Concerns::Identifiable
+    include Concerns::Durationable
 
     module Type
       INPUT = 'input'.freeze
@@ -50,11 +51,6 @@ module Regent
 
     def completed?
       @status == :completed
-    end
-
-    def duration
-      @end_time = Time.now if @end_time.nil?
-      @end_time - @start_time
     end
 
     private

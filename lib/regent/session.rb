@@ -3,6 +3,7 @@
 module Regent
   class Session
     include Concerns::Identifiable
+    include Concerns::Durationable
 
     def initialize(agent)
       super()
@@ -36,11 +37,6 @@ module Regent
 
     def running?
       start_time && end_time.nil?
-    end
-
-    def duration
-      @end_time = Time.now if @end_time.nil?
-      end_time - start_time
     end
 
     def result

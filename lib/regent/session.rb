@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Regent
   class Session
     include Concerns::Identifiable

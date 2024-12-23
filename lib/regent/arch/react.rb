@@ -3,36 +3,12 @@
 module Regent
   module Arch
     class React
-      ANSWER_SEQUENCE = "Answer:".freeze
-      ACTION_SEQUENCE = "Action:".freeze
-      OBSERVATION_SEQUENCE = "Observation:".freeze
-      STOP_SEQUENCE = "PAUSE".freeze
-
-      SYSTEM_PROMPT = <<~PROMPT
-        You are assisstant reasoning step-by-step to solve complex problems.
-        Your reasoning process happens in a loop of Though, Action, Observation.
-        Thought - a description of your thoughts about the question.
-        Action - pick a an action from available tools.
-        Observation - is the result of running a tool.
-
-        ## Available tools:
-        %{tools}
-
-        ## Example session
-        Question: What is the weather in London today?
-        Thought: I need to get the wether in London
-        Action: weather_tool | "London"
-        PAUSE
-
-        You will have a response with Observation:
-        Observation: It is 32 degress and Sunny
-
-        ... (this Thought/Action/Observation can repeat N times)
-
-        Thought: I know the final answer
-        Answer: It is 32 degress and Sunny in London
-      PROMPT
-
+      SEQUENCES = {
+        answer: "Answer:",
+        action: "Action:",
+        observation: "Observation:",
+        stop: "PAUSE"
+      }.freeze
 
       def initialize(tools, session, max_iterations)
         @tools = tools
@@ -43,27 +19,19 @@ module Regent
       attr_reader :tools, :session, :max_iterations
 
       def reason(task)
-        session.messages = [
-          {role: :system, content: SYSTEM_PROMPT % { tools: tool_names }},
-          {role: :user, content: task}
-        ]
-
-        session.continue(Span::Type::INPUT, { content: task })
+        initialize_session(task)
 
         max_iterations.times do |i|
-          content = session.continue(Span::Type::LLM_CALL, { messages: session.messages, params: { stop: [STOP_SEQUENCE] }})
-
+          content = get_llm_response
           session.messages << {role: :assistant, content: content }
 
-          return success_answer(content.split(ANSWER_SEQUENCE)[1].strip) if content.include?(ANSWER_SEQUENCE)
+          return extract_answer(content) if answer_present?(content)
 
-          if content.include?(ACTION_SEQUENCE)
-            tool, argument = lookup_tool(content.gsub(STOP_SEQUENCE, ""))
-
+          if action_present?(content)
+            tool, argument = parse_action(content)
             return session.complete unless tool
 
-            result = session.continue(Span::Type::TOOL_EXECUTION, { tool: tool, argument: argument })
-            session.messages << {role: :user, content: "#{OBSERVATION_SEQUENCE} #{result}"}
+            process_tool_execution(tool, argument)
           end
         end
 
@@ -71,6 +39,50 @@ module Regent
       end
 
       private
+
+      def initialize_session(task)
+        session.messages = [
+          {role: :system, content: ReactPromptTemplate.system_prompt(tool_names)},
+          {role: :user, content: task}
+        ]
+        session.continue(Span::Type::INPUT, { content: task })
+      end
+
+      def get_llm_response
+        session.continue(
+          Span::Type::LLM_CALL,
+          {
+            messages: session.messages,
+            params: { stop: [SEQUENCES[:stop]] }
+          }
+        )
+      end
+
+      def extract_answer(content)
+        answer = content.split(SEQUENCES[:answer])[1]&.strip
+        success_answer(answer)
+      end
+
+      def parse_action(content)
+        sanitized_content = content.gsub(SEQUENCES[:stop], "")
+        lookup_tool(sanitized_content)
+      end
+
+      def process_tool_execution(tool, argument)
+        result = session.continue(Span::Type::TOOL_EXECUTION, { tool: tool, argument: argument })
+        session.messages << {
+          role: :user,
+          content: "#{SEQUENCES[:observation]} #{result}"
+        }
+      end
+
+      def answer_present?(content)
+        content.include?(SEQUENCES[:answer])
+      end
+
+      def action_present?(content)
+        content.include?(SEQUENCES[:action])
+      end
 
       def success_answer(content)
         session.complete(Span::Type::ANSWER, { type: :success, content: content })
@@ -88,14 +100,27 @@ module Regent
 
       def lookup_tool(content)
         tool_name, argument = parse_tool_signature(content)
-        tool = @tools.find { |tool| tool.name.downcase == tool_name.downcase }
-        session.continue(Span::Type::ANSWER, { type: :failure, content: "No matching tool found for: #{tool_name}" }) unless tool
+        tool = find_matching_tool(tool_name)
+        return [nil, nil] unless tool
 
         [tool, argument]
       end
 
+      def find_matching_tool(tool_name)
+        return nil unless tool_name
+
+        tool = @tools.find { |t| t.name.downcase == tool_name.downcase }
+        unless tool
+          session.continue(
+            Span::Type::ANSWER,
+            { type: :failure, content: "No matching tool found for: #{tool_name}" }
+          )
+        end
+        tool
+      end
+
       def parse_tool_signature(content)
-        action = content.split(ACTION_SEQUENCE)[1]&.strip
+        action = content.split(SEQUENCES[:action])[1]&.strip
         return [nil, nil] unless action
 
         parts = action.split('|', 2).map(&:strip)

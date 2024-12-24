@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Regent
-  module Arch
+  module Engine
     class React
       SEQUENCES = {
         answer: "Answer:",
@@ -10,13 +10,13 @@ module Regent
         stop: "PAUSE"
       }.freeze
 
-      def initialize(tools, session, max_iterations)
-        @tools = tools
+      def initialize(toolchain, session, max_iterations)
+        @toolchain = toolchain
         @session = session
         @max_iterations = max_iterations
       end
 
-      attr_reader :tools, :session, :max_iterations
+      attr_reader :toolchain, :session, :max_iterations
 
       def reason(task)
         initialize_session(task)
@@ -42,7 +42,7 @@ module Regent
 
       def initialize_session(task)
         session.messages = [
-          {role: :system, content: ReactPromptTemplate.system_prompt(tool_names)},
+          {role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt(toolchain.to_s)},
           {role: :user, content: task}
         ]
         session.continue(Span::Type::INPUT, { content: task })
@@ -92,31 +92,16 @@ module Regent
         session.complete(Span::Type::ANSWER, { type: :failure, content: content })
       end
 
-      def tool_names
-        tools.map do |tool|
-          "#{tool.name} - #{tool.description}"
-        end.join("\n")
-      end
-
       def lookup_tool(content)
         tool_name, argument = parse_tool_signature(content)
-        tool = find_matching_tool(tool_name)
-        return [nil, nil] unless tool
+        tool = toolchain.find(tool_name)
+
+        unless tool
+          session.continue(Span::Type::ANSWER, { type: :failure, content: "No matching tool found for: #{tool_name}" })
+          return [nil, nil]
+        end
 
         [tool, argument]
-      end
-
-      def find_matching_tool(tool_name)
-        return nil unless tool_name
-
-        tool = @tools.find { |t| t.name.downcase == tool_name.downcase }
-        unless tool
-          session.continue(
-            Span::Type::ANSWER,
-            { type: :failure, content: "No matching tool found for: #{tool_name}" }
-          )
-        end
-        tool
       end
 
       def parse_tool_signature(content)

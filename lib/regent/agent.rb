@@ -10,8 +10,8 @@ module Regent
       super()
 
       @llm = llm
-      @tools = Array(tools)
       @sessions = []
+      @tools = tools.is_a?(Toolchain) ? tools : Toolchain.new(Array(tools))
       @max_iterations = options[:max_iterations] || DEFAULT_MAX_ITERATIONS
     end
 
@@ -43,7 +43,7 @@ module Regent
     end
 
     def react
-      Regent::Arch::React.new(tools, session, @max_iterations)
+      Regent::Engine::React.new(tools, session, @max_iterations)
     end
   end
 end

@@ -6,8 +6,8 @@ module Regent
 
     def initialize
       @pastel = Pastel.new
-      @spinner = TTY::Spinner.new("#{spinner_format} :title", format: :dots)
-      @nested_spinner = TTY::Spinner.new("#{dim(" ├──")}#{spinner_format} :title", format: :dots)
+      @spinner = build_spinner(spinner_symbol)
+      @nested_spinner = build_spinner("#{dim(" ├──")}#{spinner_symbol}")
     end
 
     attr_reader :spinner, :nested_spinner
@@ -46,8 +46,12 @@ module Regent
       parts.join
     end
 
-    def spinner_format
+    def spinner_symbol
       "#{dim("[")}#{green(":spinner")}#{dim("]")}"
+    end
+
+    def build_spinner(spinner_format)
+      TTY::Spinner.new("#{spinner_format} :title", format: :dots)
     end
 
     COLORS.each do |color|

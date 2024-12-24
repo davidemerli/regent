@@ -16,7 +16,7 @@ RSpec.describe Regent::Agent, :vcr do
       agent.execute("What is the capital of Japan?")
 
       expect(agent.session.messages).to eq([
-        { role: :system, content: Regent::Arch::ReactPromptTemplate.system_prompt("") },
+        { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("") },
         { role: :user, content: "What is the capital of Japan?" },
         { role: :assistant, content: "Thought: I need to find out what the capital of Japan is. \nAction: I will recall my knowledge about countries and their capitals. \nObservation: The capital of Japan is Tokyo. \n\nThought: I have the answer now.\nAnswer: The capital of Japan is Tokyo." }
       ])
@@ -56,7 +56,7 @@ RSpec.describe Regent::Agent, :vcr do
       agent.execute("What is the price of Bitcoin?")
 
       expect(agent.session.messages).to eq([
-        { role: :system, content: Regent::Arch::ReactPromptTemplate.system_prompt("price_tool - Get the price of cryptocurrencies") },
+        { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("price_tool - Get the price of cryptocurrencies") },
         { role: :user, content: "What is the price of Bitcoin?" },
         { role: :assistant, content: "Thought: I need to find the current price of Bitcoin. \nAction: price_tool | \"Bitcoin\"\nPAUSE" },
         { role: :user, content: "Observation: {'BTC': '$107,000', 'ETH': '$6,000'}" },

@@ -12,5 +12,9 @@ module Regent
     def call(argument)
       raise NotImplementedError, "Tool #{name} has not implemented the execute method"
     end
+
+    def to_s
+      "#{name} - #{description}"
+    end
   end
 end

@@ -23,11 +23,11 @@ module Regent
       start_session
       react.reason(task)
     ensure
-      session&.complete if running?
+      complete_session
     end
 
     def running?
-      session&.running? || false
+      session&.active? || false
     end
 
     def session
@@ -37,13 +37,17 @@ module Regent
     private
 
     def start_session
-      session&.complete if running?
-      @sessions << Session.new(self)
+      complete_session
+      @sessions << Session.new
       session.start
     end
 
+    def complete_session
+      session&.complete if running?
+    end
+
     def react
-      Regent::Engine::React.new(tools, session, @max_iterations)
+      Regent::Engine::React.new(llm, tools, session, @max_iterations)
     end
   end
 end

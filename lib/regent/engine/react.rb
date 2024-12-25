@@ -10,26 +10,26 @@ module Regent
         stop: "PAUSE"
       }.freeze
 
-      def initialize(toolchain, session, max_iterations)
+      def initialize(llm, toolchain, session, max_iterations)
+        @llm = llm
         @toolchain = toolchain
         @session = session
         @max_iterations = max_iterations
       end
 
-      attr_reader :toolchain, :session, :max_iterations
+      attr_reader :llm, :toolchain, :session, :max_iterations
 
       def reason(task)
         initialize_session(task)
 
         max_iterations.times do |i|
           content = get_llm_response
-          session.messages << {role: :assistant, content: content }
-
+          session.add_message({role: :assistant, content: content })
           return extract_answer(content) if answer_present?(content)
 
           if action_present?(content)
             tool, argument = parse_action(content)
-            return session.complete unless tool
+            return unless tool
 
             process_tool_execution(tool, argument)
           end
@@ -41,21 +41,18 @@ module Regent
       private
 
       def initialize_session(task)
-        session.messages = [
-          {role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt(toolchain.to_s)},
-          {role: :user, content: task}
-        ]
-        session.continue(Span::Type::INPUT, { content: task })
+        session.add_message({role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt(toolchain.to_s)})
+        session.add_message({role: :user, content: task})
+        session.exec(Span::Type::INPUT, message: task) { task }
       end
 
       def get_llm_response
-        session.continue(
-          Span::Type::LLM_CALL,
-          {
-            messages: session.messages,
-            params: { stop: [SEQUENCES[:stop]] }
-          }
-        )
+        session.exec(Span::Type::LLM_CALL, type: llm.defaults[:chat_model], message: session.messages.last[:content]) do
+          result = llm.chat(messages: session.messages, params: { stop: [SEQUENCES[:stop]] })
+          usage = result.raw_response.dig("usage")
+          session.current_span.set_meta("#{usage.dig("prompt_tokens")} → #{usage.dig("completion_tokens")} tokens")
+          result.chat_completion
+        end
       end
 
       def extract_answer(content)
@@ -69,11 +66,11 @@ module Regent
       end
 
       def process_tool_execution(tool, argument)
-        result = session.continue(Span::Type::TOOL_EXECUTION, { tool: tool, argument: argument })
-        session.messages << {
-          role: :user,
-          content: "#{SEQUENCES[:observation]} #{result}"
-        }
+        result = session.exec(Span::Type::TOOL_EXECUTION, { type: tool.name, message: argument }) do
+          tool.call(argument)
+        end
+
+        session.add_message({ role: :user, content: "#{SEQUENCES[:observation]} #{result}" })
       end
 
       def answer_present?(content)
@@ -85,11 +82,11 @@ module Regent
       end
 
       def success_answer(content)
-        session.complete(Span::Type::ANSWER, { type: :success, content: content })
+        session.exec(Span::Type::ANSWER, type: :success, message: content, duration: session.duration.round(2)) { content }
       end
 
       def error_answer(content)
-        session.complete(Span::Type::ANSWER, { type: :failure, content: content })
+        session.exec(Span::Type::ANSWER, type: :failure, message: content, duration: session.duration.round(2)) { content }
       end
 
       def lookup_tool(content)
@@ -97,7 +94,7 @@ module Regent
         tool = toolchain.find(tool_name)
 
         unless tool
-          session.continue(Span::Type::ANSWER, { type: :failure, content: "No matching tool found for: #{tool_name}" })
+          session.exec(Span::Type::ANSWER, type: :failure, message: "No matching tool found for: #{tool_name}")
           return [nil, nil]
         end
 

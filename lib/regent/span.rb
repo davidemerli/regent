@@ -6,11 +6,11 @@ module Regent
     include Concerns::Durationable
 
     module Type
-      INPUT = 'input'.freeze
-      LLM_CALL = 'llm_call'.freeze
-      TOOL_EXECUTION = 'tool_execution'.freeze
-      MEMORY_ACCESS = 'memory_access'.freeze
-      ANSWER = 'answer'.freeze
+      INPUT = 'INPUT'.freeze
+      LLM_CALL = 'LLM'.freeze
+      TOOL_EXECUTION = 'TOOL'.freeze
+      MEMORY_ACCESS = 'MEMO'.freeze
+      ANSWER = 'ANSWER'.freeze
 
       def self.all
         constants.map { |c| const_get(c) }
@@ -21,104 +21,68 @@ module Regent
       end
     end
 
-    def initialize(session:, type:, arguments:, logger: Logger.new)
+    # @param type [String] The type of span (must be one of Type.all)
+    # @param arguments [Hash] Arguments for the span
+    # @param logger [Logger] Logger instance
+    def initialize(type:, arguments:, logger: Logger.new)
       super()
 
       validate_type!(type)
 
-      @session = session
       @logger = logger
       @type = type
       @arguments = arguments
       @meta = nil
-      @status = :pending
       @output = nil
     end
 
     attr_reader :name, :arguments, :output, :type, :start_time, :end_time
 
-    def execute
-      with_status(:running) do
-        @output = send(type, @arguments)
+    # @raise [ArgumentError] if block is not given
+    # @return [String] The output of the span
+    def run
+      raise ArgumentError, "Block is required" unless block_given?
+
+      @output = log_operation do
+        yield
+      rescue StandardError => e
+        logger.error(label: type, error: e.message, **arguments)
+        raise
       end
-
-      @output
     end
 
+    # @return [Boolean] Whether the span is currently running
     def running?
-      @status == :running
+      @start_time && @end_time.nil?
     end
 
+    # @return [Boolean] Whether the span is completed
     def completed?
-      @status == :completed
+      @start_time && @end_time
+    end
+
+    # @param value [String] The meta value to set
+    def set_meta(value)
+      @meta = value.freeze
     end
 
     private
 
-    attr_reader :logger, :session
-
-    # Span type implementations
-    def llm_call(arguments)
-      log_operation(label: "LLM ", type: session.llm.defaults[:chat_model], message: arguments[:messages].last[:content]) do
-        response = session.llm.chat(
-          messages: arguments[:messages],
-          params: arguments[:params]
-        )
-
-        @meta = "#{response.raw_response.dig("usage", "prompt_tokens")} → #{response.raw_response.dig("usage", "completion_tokens")} tokens"
-
-        response.chat_completion
-      end
-    end
-
-    def tool_execution(arguments)
-      log_operation(label: "TOOL", type: arguments[:tool].name, message: arguments[:argument]) do
-        arguments[:tool].call(arguments[:argument])
-      end
-    end
-
-    def memory_access(arguments)
-      log_operation(label: "MEMO", message: "Reading memory") do
-        # TODO: Implement memory access
-      end
-    end
-
-    def input(arguments)
-      logger.success(label: "INPUT", message: arguments[:content], top_level: true)
-
-      arguments[:content]
-    end
-
-    def answer(arguments)
-      logger.success(
-        label: "ANSWER",
-        type: arguments[:type],
-        message: arguments[:content],
-        duration: session.duration.round(2),
-        top_level: true
-      )
-
-      arguments[:content]
-    end
+    attr_reader :logger, :meta
 
     def validate_type!(type)
       raise InvalidSpanType, "Invalid span type: #{type}" unless Type.valid?(type)
     end
 
-    def with_status(status)
-      @status = status
-      @start_time = Time.now if status == :running
-      yield
-      @status = :completed
-      @end_time = Time.now
-    end
-
-    def log_operation(label:, type: nil, message:, **options)
-      logger.start(label: label, type: type, message: message, **options)
+    def log_operation(&block)
+      @start_time = Time.now
+      logger.start(label: type, **arguments)
 
       result = yield
 
-      logger.success(label: label, type: type, message: message, duration: duration.round(2), meta: @meta, **options)
+      @end_time = Time.now
+      logger.success(label: type, **({ duration: duration.round(2), meta: meta }.merge(arguments)))
+
       result
     end
   end

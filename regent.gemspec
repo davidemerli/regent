@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Alex Chaplinsky"]
   spec.email = ["alchaplinsky@gmail.com"]
 
-  spec.summary = "Write a short summary, because RubyGems requires one."
-  spec.description = "Write a longer description or delete this line."
+  spec.summary = "Library for building AI Agents in Ruby"
+  spec.description = "Regent is a library for building AI Agents that utilize tools to accomplish tasks. Current implementation is based on the ReAct Agent architecture."
   spec.homepage = "https://github.com/alchaplinsky/regent"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"

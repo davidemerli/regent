@@ -6,7 +6,12 @@
 
 > [!WARNING]
 > Regent is currently an experiment intended to explore patterns for building easily traceable and debuggable AI agents of different architectures. It is not yet intended to be used in production and is currently in development.
->
+
+## Showcase
+A basic Regnt Agent extended with a `price_tool` that allows for retrieving cryptocurrency prices from coingecko.com.
+
+![screencast 2024-12-25 21-53-47](https://github.com/user-attachments/assets/4e65b731-bbd7-4732-b157-b705d35a7824)
+
 
 ## Install
 

@@ -41,14 +41,17 @@ module Regent
     # @raise [ArgumentError] if block is not given
     # @return [String] The output of the span
     def run
-      raise ArgumentError, "Block is required" unless block_given?
-
       @output = log_operation do
         yield
       rescue StandardError => e
-        logger.error(label: type, error: e.message, **arguments)
+        logger.error(label: type, message: e.message, **arguments)
         raise
       end
+    end
+
+    # @return [String] The output of the span
+    def replay
+      log_operation(live: false) { @output }
     end
 
     # @return [Boolean] Whether the span is currently running
@@ -74,13 +77,13 @@ module Regent
       raise InvalidSpanType, "Invalid span type: #{type}" unless Type.valid?(type)
     end
 
-    def log_operation(&block)
-      @start_time = Time.now
+    def log_operation(live: true, &block)
+      @start_time = live ? Time.now.freeze : @start_time
       logger.start(label: type, **arguments)
 
       result = yield
 
-      @end_time = Time.now
+      @end_time = live ? Time.now.freeze : @end_time
       logger.success(label: type, **({ duration: duration.round(2), meta: meta }.merge(arguments)))
 
       result

@@ -35,8 +35,17 @@ module Regent
     # @raise [InactiveSessionError] if session is not active
     # @return [String] The output of the span
     def exec(type, options = {}, &block)
+      raise InactiveSessionError, "Cannot execute span in inactive session" unless active?
+
       @spans << Span.new(type: type, arguments: options)
       current_span.run(&block)
+    end
+
+    # Replays the session
+    # @return [String] The result of the session
+    def replay
+      @spans.each { |span| span.replay }
+      result
     end
 
     # Completes the session and returns the result

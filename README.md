@@ -32,11 +32,31 @@ bundle install
 ```
 
 ## Usage
+In order to operate an agent needs access to LLM (large language model). Regent relies on the [Langchainrb](https://github.com/patterns-ai-core/langchainrb) library to interact with LLMs. Let's create an instance of OapnAI LLM:
+```ruby
+llm = Langchain::LLM::OpenAI(api_key: ENV["OPENAI_KEY"])
+```
+
+Agents are effective when they have tools that enable them to get new information:
 
 ```ruby
-llm = Langchain::LLM::OpenAi(...)
-agent = Regent::Agent.new(llm)
+class WeatherTool < Regent::Tool
+  def call(location)
+    # implementation of a call to weather API
+  end
+end
 
+weather_tool = WeatherTool.new(name: "weather_tool", description: "Get the weather in a given location")
+```
+
+Next, let's instantiate an agent passing LLM and a set of tools:
+
+```ruby
+agent = Regent::Agent.new(llm: llm, tools: [weather_tool])
+```
+
+Simply run an execute function, passing your query as an argument
+``` ruby
 agent.execute("What is the weather in London today?")
 ```
 

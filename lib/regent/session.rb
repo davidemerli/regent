@@ -44,7 +44,7 @@ module Regent
     # Replays the session
     # @return [String] The result of the session
     def replay
-      @spans.each { |span| span.replay }
+      spans.each { |span| span.replay }
       result
     end
 

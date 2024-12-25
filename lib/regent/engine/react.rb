@@ -49,8 +49,9 @@ module Regent
       def get_llm_response
         session.exec(Span::Type::LLM_CALL, type: llm.defaults[:chat_model], message: session.messages.last[:content]) do
           result = llm.chat(messages: session.messages, params: { stop: [SEQUENCES[:stop]] })
-          usage = result.raw_response.dig("usage")
-          session.current_span.set_meta("#{usage.dig("prompt_tokens")} → #{usage.dig("completion_tokens")} tokens")
+
+          # Relying on Langchain Response interface to get token counts and chat completion
+          session.current_span.set_meta("#{result.prompt_tokens} → #{result.completion_tokens} tokens")
           result.chat_completion
         end
       end

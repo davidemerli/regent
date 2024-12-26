@@ -2,6 +2,7 @@
 
 require 'securerandom'
 require 'langchain'
+require 'gemini-ai'
 require 'pastel'
 require 'tty-spinner'
 require 'zeitwerk'
@@ -12,5 +13,6 @@ module Regent
 
   loader = Zeitwerk::Loader.for_gem
   loader.inflector.inflect("llm" => "LLM")
+  loader.inflector.inflect("open_ai" => "OpenAI")
   loader.setup
 end

@@ -14,6 +14,7 @@ gem "pastel", "~> 0.8.0"
 gem "http", "~> 5.1"
 
 gem "anthropic"
+gem "gemini-ai"
 
 group :test do
   gem "vcr", "~> 6.2"

@@ -12,7 +12,7 @@ VCR.configure do |config|
   config.configure_rspec_metadata!
 
   # Filter out sensitive data like API keys
-  config.filter_sensitive_data('<OPENAI_API_KEY>') { ENV['OPENAI_API_KEY'] }
+  config.filter_sensitive_data('<OPEN_AI_API_KEY>') { ENV['OPEN_AI_API_KEY'] }
 end
 
 RSpec.configure do |config|

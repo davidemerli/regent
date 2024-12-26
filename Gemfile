@@ -13,6 +13,8 @@ gem "tty-spinner", "~> 0.9.3"
 gem "pastel", "~> 0.8.0"
 gem "http", "~> 5.1"
 
+gem "anthropic"
+
 group :test do
   gem "vcr", "~> 6.2"
   gem "webmock", "~> 3.19"

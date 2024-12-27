@@ -25,3 +25,5 @@ jobs:
         bundler-cache: true
     - name: Run the default task
       run: bundle exec rake
+      env:
+        OPENAI_API_KEY: OPENAI_API_KEY

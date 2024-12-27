@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Regent::Agent, :vcr do
-  let(:llm) { Langchain::LLM::OpenAI.new(api_key: ENV['OPEN_AI_API_KEY']) }
+  let(:llm) { Regent::LLM.new(model: "gpt-4o-mini") }
   let(:agent) { Regent::Agent.new(llm: llm) }
 
 

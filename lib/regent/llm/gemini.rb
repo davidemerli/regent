@@ -3,7 +3,11 @@
 module Regent
   class LLM
     class Gemini < Base
-      def invoke(messages, **options)
+      ENV_KEY = "GEMINI_API_KEY"
+
+      depends_on "gemini-ai"
+
+      def invoke(messages, **args)
         response = client.generate_content({ contents: format_messages(messages) })
         format_response(response)
       end
@@ -32,12 +36,6 @@ module Regent
             output_tokens: response.dig("usageMetadata", "candidatesTokenCount")
           )
         )
-      end
-
-      def api_key_from_env
-        ENV.fetch("GEMINI_API_KEY") do
-          raise APIKeyNotFoundError, "API key not found. Make sure to set GEMINI_API_KEY environment variable."
-        end
       end
     end
   end

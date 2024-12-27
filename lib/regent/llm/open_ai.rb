@@ -3,22 +3,34 @@
 module Regent
   class LLM
     class OpenAI < Base
+      ENV_KEY = "OPENAI_API_KEY"
 
-      def invoke(messages, **options)
-        response = client.chat(messages: format_messages(messages), **options)
+      depends_on "ruby-openai"
+
+      def invoke(messages, **args)
+        response = client.chat(parameters: {
+          messages: format_messages(messages),
+          model: options[:model],
+          stop: args[:stop]
+        })
         format_response(response)
       end
 
       private
 
       def client
-        @client ||= ::Langchain::LLM::OpenAI.new(api_key: api_key)
+        @client ||= ::OpenAI::Client.new(access_token: api_key)
       end
 
-      def api_key_from_env
-        ENV.fetch("OPENAI_API_KEY") do
-          raise APIKeyNotFoundError, "API key not found. Make sure to set OPENAI_API_KEY environment variable."
-        end
+      def format_response(response)
+        Response.new(
+          content: response.dig("choices", 0, "message", "content"),
+          model: options[:model],
+          usage: Usage.new(
+            input_tokens: response.dig("usage", "prompt_tokens"),
+            output_tokens: response.dig("usage", "completion_tokens")
+          )
+        )
       end
     end
   end

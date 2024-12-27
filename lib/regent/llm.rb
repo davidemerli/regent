@@ -11,17 +11,20 @@ module Regent
     def initialize(model:, **options)
       @model = model
       @options = options
+      @provider = instance_provider
     end
 
-    def invoke(messages)
-      response = provider.invoke( messages, **options)
+    attr_reader :model, :options
+
+    def invoke(messages, **args)
+      response = provider.invoke(messages, **args)
     end
 
     private
 
-    attr_reader :model, :options
+    attr_reader :provider
 
-    def provider
+    def instance_provider
       provider_class = find_provider_class
       raise ProviderNotFoundError, "Provider for #{model} is not found" if provider_class.nil?
 

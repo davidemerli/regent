@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'securerandom'
-require 'langchain'
-require 'gemini-ai'
 require 'pastel'
 require 'tty-spinner'
 require 'zeitwerk'

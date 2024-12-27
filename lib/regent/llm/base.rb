@@ -22,17 +22,20 @@ module Regent
     end
 
     class Base
+      include Concerns::Dependable
+
       def initialize(**options)
         @options = options
+        super()
       end
 
-      def invoke(messages, **options)
-        provider.chat(messages: format_messages(messages), **options)
+      def invoke(messages, **args)
+        provider.chat(messages: format_messages(messages), **args)
       end
 
       private
 
-      attr_reader :options
+      attr_reader :options, :dependency
 
       def format_messages(messages)
         messages
@@ -48,6 +51,12 @@ module Regent
 
       def api_key
         @api_key ||= options[:api_key] || api_key_from_env
+      end
+
+      def api_key_from_env
+        ENV.fetch(self.class::ENV_KEY) do
+          raise APIKeyNotFoundError, "API key not found. Make sure to set #{self.class::ENV_KEY} environment variable."
+        end
       end
     end
   end

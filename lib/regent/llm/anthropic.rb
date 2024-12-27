@@ -3,22 +3,36 @@
 module Regent
   class LLM
     class Anthropic < Base
+      MAX_TOKENS = 1000
+      ENV_KEY = "ANTHROPIC_API_KEY"
 
-      def invoke(messages, **options)
-        response = client.chat(messages: format_messages(messages), **options)
+      depends_on "anthropic"
+
+      def invoke(messages, **args)
+        response = client.messages(parameters: {
+          messages: format_messages(messages),
+          model: options[:model],
+          stop_reason: args[:stop],
+          max_tokens: MAX_TOKENS
+        })
         format_response(response)
       end
 
       private
 
       def client
-        @client ||= ::Langchain::LLM::Anthropic.new(api_key: ENV.fetch("ANTHROPIC_API_KEY"))
+        @client ||= ::Anthropic::Client.new(access_token: api_key)
       end
 
-      def api_key_from_env
-        ENV.fetch("ANTHROPIC_API_KEY") do
-          raise APIKeyNotFoundError, "API key not found. Make sure to set ANTHROPIC_API_KEY environment variable."
-        end
+      def format_response(response)
+        Response.new(
+          content: response.dig("content", 0, "text"),
+          model: options[:model],
+          usage: Usage.new(
+            input_tokens: response.dig("usage", "input_tokens"),
+            output_tokens: response.dig("usage", "output_tokens")
+          )
+        )
       end
     end
   end

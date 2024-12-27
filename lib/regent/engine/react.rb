@@ -47,12 +47,12 @@ module Regent
       end
 
       def get_llm_response
-        session.exec(Span::Type::LLM_CALL, type: llm.defaults[:chat_model], message: session.messages.last[:content]) do
-          result = llm.chat(messages: session.messages, params: { stop: [SEQUENCES[:stop]] })
+        session.exec(Span::Type::LLM_CALL, type: llm.model, message: session.messages.last[:content]) do
+          result = llm.invoke(session.messages, stop: [SEQUENCES[:stop]])
 
           # Relying on Langchain Response interface to get token counts and chat completion
-          session.current_span.set_meta("#{result.prompt_tokens} → #{result.completion_tokens} tokens")
-          result.chat_completion
+          session.current_span.set_meta("#{result.usage.input_tokens} → #{result.usage.output_tokens} tokens")
+          result.content
         end
       end
 

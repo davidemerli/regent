@@ -2,9 +2,7 @@ PATH
   remote: .
   specs:
     regent (0.2.1)
-      langchainrb (~> 0.19.2)
       pastel (~> 0.8.0)
-      ruby-openai (~> 7.3.1)
       tty-spinner (~> 0.9.3)
       zeitwerk (~> 2.7)
 
@@ -17,7 +15,6 @@ GEM
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
       faraday-multipart (>= 1)
-    baran (0.1.12)
     base64 (0.2.0)
     bigdecimal (3.1.8)
     crack (1.0.0)
@@ -72,21 +69,12 @@ GEM
       domain_name (~> 0.5)
     http-form_data (2.3.0)
     json (2.9.0)
-    json-schema (4.3.1)
-      addressable (>= 2.8)
     jwt (2.10.0)
       base64
-    langchainrb (0.19.2)
-      baran (~> 0.1.9)
-      json-schema (~> 4)
-      matrix
-      pragmatic_segmenter (~> 0.3.0)
-      zeitwerk (~> 2.5)
     llhttp-ffi (0.5.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     logger (1.6.3)
-    matrix (0.4.2)
     multi_json (1.15.0)
     multipart-post (2.4.1)
     net-http (0.6.0)
@@ -94,7 +82,6 @@ GEM
     os (1.1.4)
     pastel (0.8.0)
       tty-color (~> 0.5)
-    pragmatic_segmenter (0.3.24)
     public_suffix (6.0.1)
     rake (13.2.1)
     rexml (3.4.0)

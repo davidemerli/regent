@@ -2,7 +2,7 @@
 
 # Regent
 
-**Regent** is an small Ruby framework for building AI agents that can think, reason, and take actions through tools. It provides a clean, intuitive interface for creating agents that can solve complex problems by breaking them down into logical steps.
+**Regent** is a small and elegant Ruby framework for building AI agents that can think, reason, and take actions through tools. It provides a clean, intuitive interface for creating agents that can solve complex problems by breaking them down into logical steps.
 
 > [!WARNING]
 > Regent is currently an experiment intended to explore patterns for building easily traceable and debuggable AI agents of different architectures. It is not yet intended to be used in production and is currently in development.

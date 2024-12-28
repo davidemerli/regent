@@ -105,9 +105,9 @@ module Regent
         action = content.split(SEQUENCES[:action])[1]&.strip
         return [nil, nil] unless action
 
-        parts = action.split('|', 2).map(&:strip)
-        tool_name = parts[0]
-        argument = parts[1].gsub('"', '')
+        parts = action.split('|').map(&:strip)
+        tool_name = parts[0].gsub(/["`']/, '')
+        argument = parts[1].gsub(/["`']/, '')
 
         # Handle cases where argument is nil, empty, or only whitespace
         argument = nil if argument.nil? || argument.empty?

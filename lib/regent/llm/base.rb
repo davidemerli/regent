@@ -37,10 +37,6 @@ module Regent
 
       attr_reader :options, :dependency
 
-      def format_messages(messages)
-        messages
-      end
-
       def format_response(response)
         Response.new(
           content: response.chat_completion,

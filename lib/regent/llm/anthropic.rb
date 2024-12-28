@@ -11,8 +11,9 @@ module Regent
       def invoke(messages, **args)
         response = client.messages(parameters: {
           messages: format_messages(messages),
+          system: system_instruction(messages),
           model: options[:model],
-          stop_reason: args[:stop],
+          stop_sequences: args[:stop] ? args[:stop] : nil,
           max_tokens: MAX_TOKENS
         })
         format_response(response)
@@ -22,6 +23,14 @@ module Regent
 
       def client
         @client ||= ::Anthropic::Client.new(access_token: api_key)
+      end
+
+      def system_instruction(messages)
+        messages.find { |message| message[:role].to_s == "system" }&.dig(:content)
+      end
+
+      def format_messages(messages)
+        messages.reject { |message| message[:role].to_s == "system" }
       end
 
       def format_response(response)

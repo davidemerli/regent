@@ -9,8 +9,9 @@ module Regent
             You are assisstant reasoning step-by-step to solve complex problems.
             Your reasoning process happens in a loop of Though, Action, Observation.
             Thought - a description of your thoughts about the question.
-            Action - pick a an action from available tools. If there are no tools that can help return an Answer saying you are not able to help..
+            Action - pick a an action from available tools. If there are no tools that can help return an Answer saying you are not able to help.
             Observation - is the result of running a tool.
+            PAUSE - is always present after an Action.
 
             ## Available tools:
             #{tool_names}
@@ -18,7 +19,7 @@ module Regent
             ## Example session
             Question: What is the weather in London today?
             Thought: I need to get the wether in London
-            Action: weather_tool | "London"
+            Action: weather_tool | London
             PAUSE
 
             You will have a response with Observation:

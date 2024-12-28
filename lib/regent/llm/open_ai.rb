@@ -9,7 +9,7 @@ module Regent
 
       def invoke(messages, **args)
         response = client.chat(parameters: {
-          messages: format_messages(messages),
+          messages: messages,
           model: options[:model],
           stop: args[:stop]
         })

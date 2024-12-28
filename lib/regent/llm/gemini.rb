@@ -23,7 +23,7 @@ module Regent
 
       def format_messages(messages)
         messages.map do |message|
-          { role: message[:role], parts: [{ text: message[:content] }] }
+          { role: message[:role].to_s == "system" ? "user" : message[:role], parts: [{ text: message[:content] }] }
         end
       end
 

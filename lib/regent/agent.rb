@@ -6,16 +6,17 @@ module Regent
 
     DEFAULT_MAX_ITERATIONS = 10
 
-    def initialize(llm:, tools: [], **options)
+    def initialize(context, llm:, tools: [], **options)
       super()
 
+      @context = context
       @llm = llm
       @sessions = []
       @tools = tools.is_a?(Toolchain) ? tools : Toolchain.new(Array(tools))
       @max_iterations = options[:max_iterations] || DEFAULT_MAX_ITERATIONS
     end
 
-    attr_reader :sessions, :llm, :tools
+    attr_reader :context, :sessions, :llm, :tools
 
     def execute(task)
       raise ArgumentError, "Task cannot be empty" if task.to_s.strip.empty?
@@ -47,7 +48,7 @@ module Regent
     end
 
     def react
-      Regent::Engine::React.new(llm, tools, session, @max_iterations)
+      Regent::Engine::React.new(context, llm, tools, session, @max_iterations)
     end
   end
 end

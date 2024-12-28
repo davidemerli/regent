@@ -10,14 +10,15 @@ module Regent
         stop: "PAUSE"
       }.freeze
 
-      def initialize(llm, toolchain, session, max_iterations)
+      def initialize(context, llm, toolchain, session, max_iterations)
+        @context = context
         @llm = llm
         @toolchain = toolchain
         @session = session
         @max_iterations = max_iterations
       end
 
-      attr_reader :llm, :toolchain, :session, :max_iterations
+      attr_reader :context, :llm, :toolchain, :session, :max_iterations
 
       def reason(task)
         initialize_session(task)
@@ -41,7 +42,7 @@ module Regent
       private
 
       def initialize_session(task)
-        session.add_message({role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt(toolchain.to_s)})
+        session.add_message({role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt(context, toolchain.to_s)})
         session.add_message({role: :user, content: task})
         session.exec(Span::Type::INPUT, message: task) { task }
       end

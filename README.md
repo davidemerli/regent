@@ -2,10 +2,21 @@
 
 # Regent
 
-**Regent** is library for building AI agents with Ruby.
+**Regent** is an small Ruby framework for building AI agents that can think, reason, and take actions through tools. It provides a clean, intuitive interface for creating agents that can solve complex problems by breaking them down into logical steps.
 
 > [!WARNING]
 > Regent is currently an experiment intended to explore patterns for building easily traceable and debuggable AI agents of different architectures. It is not yet intended to be used in production and is currently in development.
+
+## Key Features
+
+- **ReAct Pattern Implementation**: Agents follow the Reasoning-Action pattern, making decisions through a clear thought process before taking actions
+- **Multi-LLM Support**: Seamlessly works with:
+  - OpenAI (GPT models)
+  - Anthropic (Claude models)
+  - Google (Gemini models)
+- **Extensible Tool System**: Create custom tools that agents can use to interact with external services, APIs, or perform specific tasks
+- **Built-in Tracing**: Every agent interaction is traced and can be replayed, making debugging and monitoring straightforward
+- **Clean Ruby Interface**: Designed to feel natural to Ruby developers while maintaining powerful capabilities
 
 ## Showcase
 
@@ -13,7 +24,7 @@ A basic Regnt Agent extended with a `price_tool` that allows for retrieving cryp
 
 ![screencast 2024-12-25 21-53-47](https://github.com/user-attachments/assets/4e65b731-bbd7-4732-b157-b705d35a7824)
 
-## Install
+## Quick Start
 
 ```bash
 gem install regent
@@ -31,47 +42,41 @@ and run
 bundle install
 ```
 
-## Available LLMs
-
-Regent currently supports LLMs from the following providers:
-
-| Provider      |         Models         | Supported |
-| ------------- | :--------------------: | :-------: |
-| OpenAI        |  `gpt-` based models   |    ✅     |
-| Anthropic     | `claude-` based models |    ✅     |
-| Google Gemini | `gemini-` based models |    ✅     |
-
 ## Usage
 
-In order to operate an agent needs access to LLM (large language model). Regent provides a simple interface for interacting with LLMs. You can create an instance of any LLM provider by passing the model name to the `Regent::LLM.new` method:
+Create your first agent:
 
 ```ruby
-llm = Regent::LLM.new("gpt-4o-mini")
-```
+# Initialize the LLM
+llm = Regent::LLM.new("gpt-4o")
 
-Agents are effective when they have tools that enable them to get new information:
-
-```ruby
+# Create a custom tool
 class WeatherTool < Regent::Tool
   def call(location)
-    # implementation of a call to weather API
+    # Implement weather lookup logic
+    "Currently 72°F and sunny in #{location}"
   end
 end
 
-weather_tool = WeatherTool.new(name: "weather_tool", description: "Get the weather in a given location")
+# Create and configure the agent
+agent = Regent::Agent.new(
+  "You are a helpful weather assistant",
+  llm: llm,
+  tools: [WeatherTool.new(
+    name: "weather_tool",
+    description: "Get current weather for a location"
+  )]
+)
+
+# Execute a query
+result = agent.execute("What's the weather like in Tokyo?") # => "It is currently 72°F and sunny in Tokyo."
 ```
 
-Next, let's instantiate an agent passing agent's statement, LLM and a set of tools:
-
-```ruby
-agent = Regent::Agent.new("You are a weather AI agent", llm: llm, tools: [weather_tool])
-```
-
-Simply run an execute function, passing your query as an argument
-
-```ruby
-agent.execute("What is the weather in London today?")
-```
+## Why Regent?
+- **Transparent Decision Making**: Watch your agent's thought process as it reasons through problems
+- **Flexible Architecture**: Easy to extend with custom tools and adapt to different use cases
+- **Production Ready**: Built with tracing, error handling, and clean abstractions
+- **Ruby-First Design**: Takes advantage of Ruby's elegant syntax and conventions
 
 ## Development
 

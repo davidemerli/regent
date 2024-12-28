@@ -31,6 +31,16 @@ and run
 bundle install
 ```
 
+## Available LLMs
+
+Regent currently supports LLMs from the following providers:
+
+| Provider      |         Models         | Supported |
+| ------------- | :--------------------: | :-------: |
+| OpenAI        |  `gpt-` based models   |    ✅     |
+| Anthropic     | `claude-` based models |    ✅     |
+| Google Gemini | `gemini-` based models |    ✅     |
+
 ## Usage
 
 In order to operate an agent needs access to LLM (large language model). Regent provides a simple interface for interacting with LLMs. You can create an instance of any LLM provider by passing the model name to the `Regent::LLM.new` method:
@@ -51,10 +61,10 @@ end
 weather_tool = WeatherTool.new(name: "weather_tool", description: "Get the weather in a given location")
 ```
 
-Next, let's instantiate an agent passing LLM and a set of tools:
+Next, let's instantiate an agent passing agent's statement, LLM and a set of tools:
 
 ```ruby
-agent = Regent::Agent.new(llm: llm, tools: [weather_tool])
+agent = Regent::Agent.new("You are a weather AI agent", llm: llm, tools: [weather_tool])
 ```
 
 Simply run an execute function, passing your query as an argument

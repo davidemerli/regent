@@ -1,6 +1,13 @@
 ![regent_light](https://github.com/user-attachments/assets/62564dac-b8d7-4dc0-9b63-64c6841b5872)
 
+<div align="center">
+
 # Regent
+[![Gem Version](https://badge.fury.io/rb/regent.svg)](https://badge.fury.io/rb/regent)
+[![Build](https://github.com/alchaplinsky/regent/actions/workflows/main.yml/badge.svg)](https://github.com/alchaplinsky/regent/actions/workflows/main.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
 
 **Regent** is a small and elegant Ruby framework for building AI agents that can think, reason, and take actions through tools. It provides a clean, intuitive interface for creating agents that can solve complex problems by breaking them down into logical steps.
 

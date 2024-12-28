@@ -1,17 +1,17 @@
-
 ![regent_light](https://github.com/user-attachments/assets/62564dac-b8d7-4dc0-9b63-64c6841b5872)
 
 # Regent
+
 **Regent** is library for building AI agents with Ruby.
 
 > [!WARNING]
 > Regent is currently an experiment intended to explore patterns for building easily traceable and debuggable AI agents of different architectures. It is not yet intended to be used in production and is currently in development.
 
 ## Showcase
+
 A basic Regnt Agent extended with a `price_tool` that allows for retrieving cryptocurrency prices from coingecko.com.
 
 ![screencast 2024-12-25 21-53-47](https://github.com/user-attachments/assets/4e65b731-bbd7-4732-b157-b705d35a7824)
-
 
 ## Install
 
@@ -32,9 +32,11 @@ bundle install
 ```
 
 ## Usage
-In order to operate an agent needs access to LLM (large language model). Regent relies on the [Langchainrb](https://github.com/patterns-ai-core/langchainrb) library to interact with LLMs. Let's create an instance of OapnAI LLM:
+
+In order to operate an agent needs access to LLM (large language model). Regent provides a simple interface for interacting with LLMs. You can create an instance of any LLM provider by passing the model name to the `Regent::LLM.new` method:
+
 ```ruby
-llm = Langchain::LLM::OpenAI(api_key: ENV["OPENAI_KEY"])
+llm = Regent::LLM.new("gpt-4o-mini")
 ```
 
 Agents are effective when they have tools that enable them to get new information:
@@ -56,7 +58,8 @@ agent = Regent::Agent.new(llm: llm, tools: [weather_tool])
 ```
 
 Simply run an execute function, passing your query as an argument
-``` ruby
+
+```ruby
 agent.execute("What is the weather in London today?")
 ```
 

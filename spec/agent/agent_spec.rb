@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Regent::Agent, :vcr do
-  let(:llm) { Regent::LLM.new(model: "gpt-4o-mini") }
+  let(:llm) { Regent::LLM.new("gpt-4o-mini") }
   let(:agent) { Regent::Agent.new("You are an AI agent", llm: llm) }
 
 

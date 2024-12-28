@@ -8,10 +8,13 @@ module Regent
       Anthropic: /^claude-/
     }.freeze
 
-    def initialize(model:, **options)
+    class ProviderNotFoundError < StandardError; end
+    class APIKeyNotFoundError < StandardError; end
+
+    def initialize(model, **options)
       @model = model
       @options = options
-      @provider = instance_provider
+      instantiate_provider
     end
 
     attr_reader :model, :options
@@ -24,7 +27,7 @@ module Regent
 
     attr_reader :provider
 
-    def instance_provider
+    def instantiate_provider
       provider_class = find_provider_class
       raise ProviderNotFoundError, "Provider for #{model} is not found" if provider_class.nil?
 

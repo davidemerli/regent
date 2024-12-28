@@ -26,6 +26,8 @@ module Regent
 
       def initialize(**options)
         @options = options
+        api_key.nil?
+
         super()
       end
 

@@ -4,10 +4,10 @@ module Regent
   class Logger
     COLORS = %i[dim green yellow red blue cyan clear].freeze
 
-    def initialize
+    def initialize(output: $stdout)
       @pastel = Pastel.new
-      @spinner = build_spinner(spinner_symbol)
-      @nested_spinner = build_spinner("#{dim(" ├──")}#{spinner_symbol}")
+      @spinner = build_spinner(spinner_symbol, output)
+      @nested_spinner = build_spinner("#{dim(" ├──")}#{spinner_symbol}", output)
     end
 
     attr_reader :spinner, :nested_spinner
@@ -50,8 +50,8 @@ module Regent
       "#{dim("[")}#{green(":spinner")}#{dim("]")}"
     end
 
-    def build_spinner(spinner_format)
-      TTY::Spinner.new("#{spinner_format} :title", format: :dots)
+    def build_spinner(spinner_format, output)
+      TTY::Spinner.new("#{spinner_format} :title", format: :dots, output: output)
     end
 
     COLORS.each do |color|

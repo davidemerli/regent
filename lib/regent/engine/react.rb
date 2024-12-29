@@ -44,7 +44,7 @@ module Regent
       def initialize_session(task)
         session.add_message({role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt(context, toolchain.to_s)})
         session.add_message({role: :user, content: task})
-        session.exec(Span::Type::INPUT, message: task) { task }
+        session.exec(Span::Type::INPUT, top_level: true, message: task) { task }
       end
 
       def get_llm_response
@@ -83,11 +83,11 @@ module Regent
       end
 
       def success_answer(content)
-        session.exec(Span::Type::ANSWER, type: :success, message: content, duration: session.duration.round(2)) { content }
+        session.exec(Span::Type::ANSWER, top_level: true,type: :success, message: content, duration: session.duration.round(2)) { content }
       end
 
       def error_answer(content)
-        session.exec(Span::Type::ANSWER, type: :failure, message: content, duration: session.duration.round(2)) { content }
+        session.exec(Span::Type::ANSWER, top_level: true, type: :failure, message: content, duration: session.duration.round(2)) { content }
       end
 
       def lookup_tool(content)

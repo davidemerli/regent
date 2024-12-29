@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Regent::LLM do
-
   subject { Regent::LLM.new(model) }
 
   context "Unsupported model" do

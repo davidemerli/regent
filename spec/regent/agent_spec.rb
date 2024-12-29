@@ -4,7 +4,7 @@ RSpec.describe Regent::Agent, :vcr do
   let(:llm) { Regent::LLM.new(model) }
   let(:agent) { Regent::Agent.new("You are an AI agent", llm: llm) }
   let(:tool) { PriceTool.new(name: 'price_tool', description: 'Get the price of cryptocurrencies') }
-
+  let(:spinner) { double("spinner", auto_spin: nil, update: nil, success: nil, error: nil) }
   class PriceTool < Regent::Tool
     def call(query)
       "{'BTC': '$107,000', 'ETH': '$6,000'}"
@@ -42,6 +42,35 @@ RSpec.describe Regent::Agent, :vcr do
 
         expect(agent.session.spans.last.type).to eq(Regent::Span::Type::ANSWER)
         expect(agent.session.spans.last.output).to eq("The capital of Japan is Tokyo.")
+      end
+
+      context "logging" do
+        before do
+          allow(TTY::Spinner).to receive(:new).and_return(spinner)
+        end
+
+        it "logs steps in the console" do
+          agent.execute("What is the capital of Japan?")
+
+          # Input
+          expect(spinner).to have_received(:update).with(
+            title: "\e[2m[\e[0m\e[36mINPUT\e[0m\e[2m]\e[0m\e[2m:\e[0m\e[0m What is the capital of Japan?\e[0m"
+          )
+
+          # LLM Call
+          expect(spinner).to have_received(:update).with(
+            title: "\e[2m[\e[0m\e[36mLLM\e[0m\e[2m ❯\e[0m \e[33mgpt-4o-mini\e[0m\e[2m]\e[0m\e[2m:\e[0m\e[0m What is the capital of Japan?\e[0m"
+          )
+
+          # LLM Call response
+          expect(spinner).to have_received(:update).with(
+            title: "\e[2m[\e[0m\e[36mLLM\e[0m\e[2m ❯\e[0m \e[33mgpt-4o-mini\e[0m\e[2m]\e[0m\e[2m[170 → 57 tokens]\e[0m\e[2m[0.01s]\e[0m\e[2m:\e[0m\e[0m What is the capital of Japan?\e[0m"
+          )
+          # Answer
+          expect(spinner).to have_received(:update).with(
+            title: "\e[2m[\e[0m\e[36mANSWER\e[0m\e[2m ❯\e[0m \e[33msuccess\e[0m\e[2m]\e[0m\e[2m[0.01s]\e[0m\e[2m:\e[0m\e[0m The capital of Japan is Tokyo.\e[0m"
+          ).exactly(2).times
+        end
       end
     end
 

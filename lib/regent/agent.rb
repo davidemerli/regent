@@ -18,7 +18,7 @@ module Regent
 
     attr_reader :context, :sessions, :model, :tools
 
-    def execute(task)
+    def run(task)
       raise ArgumentError, "Task cannot be empty" if task.to_s.strip.empty?
 
       start_session

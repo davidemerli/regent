@@ -18,11 +18,11 @@ RSpec.describe Regent::Agent, :vcr do
       let(:cassette) { "Regent_Agent/OpenAI/answers_a_basic_question" }
 
       it "answers a basic question" do
-        expect(agent.execute("What is the capital of Japan?")).to eq("The capital of Japan is Tokyo.")
+        expect(agent.run("What is the capital of Japan?")).to eq("The capital of Japan is Tokyo.")
       end
 
       it "stores messages within a session" do
-        agent.execute("What is the capital of Japan?")
+        agent.run("What is the capital of Japan?")
 
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "") },
@@ -32,7 +32,7 @@ RSpec.describe Regent::Agent, :vcr do
       end
 
       it "stores session history" do
-        agent.execute("What is the capital of Japan?")
+        agent.run("What is the capital of Japan?")
 
         expect(agent.session.spans.count).to eq(3)
         expect(agent.session.spans.first.type).to eq(Regent::Span::Type::INPUT)
@@ -50,7 +50,7 @@ RSpec.describe Regent::Agent, :vcr do
         end
 
         it "logs steps in the console" do
-          agent.execute("What is the capital of Japan?")
+          agent.run("What is the capital of Japan?")
 
           # Input
           expect(spinner).to have_received(:update).with(
@@ -79,12 +79,12 @@ RSpec.describe Regent::Agent, :vcr do
       let(:agent) { Regent::Agent.new("You are an AI agent", model: llm, tools: [tool]) }
 
       it "answers a question with a tool" do
-        expect(agent.execute("What is the price of Bitcoin?")).to eq("The price of Bitcoin is $107,000.")
-        expect(agent.execute("What is the price of Ethereum?")).to eq("The price of Ethereum is $6,000.")
+        expect(agent.run("What is the price of Bitcoin?")).to eq("The price of Bitcoin is $107,000.")
+        expect(agent.run("What is the price of Ethereum?")).to eq("The price of Ethereum is $6,000.")
       end
 
       it "stores messages within a session" do
-        agent.execute("What is the price of Bitcoin?")
+        agent.run("What is the price of Bitcoin?")
 
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "price_tool - Get the price of cryptocurrencies") },
@@ -96,7 +96,7 @@ RSpec.describe Regent::Agent, :vcr do
       end
 
       it "stores session history" do
-        agent.execute("What is the price of Bitcoin?")
+        agent.run("What is the price of Bitcoin?")
 
         expect(agent.session.spans.count).to eq(5)
         expect(agent.session.spans.first.type).to eq(Regent::Span::Type::INPUT)
@@ -115,11 +115,11 @@ RSpec.describe Regent::Agent, :vcr do
       let(:cassette) { "Regent_Agent/Anthropic/answers_a_basic_question" }
 
       it "answers a basic question" do
-        expect(agent.execute("What is the capital of Japan?")).to eq("The capital of Japan is Tokyo.\n\nTokyo has been the capital of Japan since 1868, when it replaced the former capital, Kyoto. It is not only the political center of Japan but also its economic and cultural hub, being one of the world's largest and most populous metropolitan areas.")
+        expect(agent.run("What is the capital of Japan?")).to eq("The capital of Japan is Tokyo.\n\nTokyo has been the capital of Japan since 1868, when it replaced the former capital, Kyoto. It is not only the political center of Japan but also its economic and cultural hub, being one of the world's largest and most populous metropolitan areas.")
       end
 
       it "stores messages within a session" do
-        agent.execute("What is the capital of Japan?")
+        agent.run("What is the capital of Japan?")
 
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "") },
@@ -129,7 +129,7 @@ RSpec.describe Regent::Agent, :vcr do
       end
 
       it "stores session history" do
-        agent.execute("What is the capital of Japan?")
+        agent.run("What is the capital of Japan?")
 
         expect(agent.session.spans.count).to eq(3)
         expect(agent.session.spans.first.type).to eq(Regent::Span::Type::INPUT)
@@ -147,12 +147,12 @@ RSpec.describe Regent::Agent, :vcr do
       let(:agent) { Regent::Agent.new("You are an AI agent", model: llm, tools: [tool]) }
 
       it "answers a question with a tool" do
-        expect(agent.execute("What is the price of Bitcoin?")).to eq("The current price of Bitcoin (BTC) is $107,000.")
-        expect(agent.execute("What is the price of Ethereum?")).to eq("The current price of Ethereum (ETH) is $6,000.")
+        expect(agent.run("What is the price of Bitcoin?")).to eq("The current price of Bitcoin (BTC) is $107,000.")
+        expect(agent.run("What is the price of Ethereum?")).to eq("The current price of Ethereum (ETH) is $6,000.")
       end
 
       it "stores messages within a session" do
-        agent.execute("What is the price of Bitcoin?")
+        agent.run("What is the price of Bitcoin?")
 
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "price_tool - Get the price of cryptocurrencies") },
@@ -164,7 +164,7 @@ RSpec.describe Regent::Agent, :vcr do
       end
 
       it "stores session history" do
-        agent.execute("What is the price of Bitcoin?")
+        agent.run("What is the price of Bitcoin?")
 
         expect(agent.session.spans.count).to eq(5)
         expect(agent.session.spans.first.type).to eq(Regent::Span::Type::INPUT)
@@ -183,11 +183,11 @@ RSpec.describe Regent::Agent, :vcr do
       let(:cassette) { "Regent_Agent/Google_Gemini/answers_a_basic_question" }
 
       it "answers a basic question" do
-        expect(agent.execute("What is the capital of Japan?")).to eq("Tokyo")
+        expect(agent.run("What is the capital of Japan?")).to eq("Tokyo")
       end
 
       it "stores messages within a session" do
-        agent.execute("What is the capital of Japan?")
+        agent.run("What is the capital of Japan?")
 
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "") },
@@ -197,7 +197,7 @@ RSpec.describe Regent::Agent, :vcr do
       end
 
       it "stores session history" do
-        agent.execute("What is the capital of Japan?")
+        agent.run("What is the capital of Japan?")
 
         expect(agent.session.spans.count).to eq(3)
         expect(agent.session.spans.first.type).to eq(Regent::Span::Type::INPUT)
@@ -215,12 +215,12 @@ RSpec.describe Regent::Agent, :vcr do
       let(:agent) { Regent::Agent.new("You are an AI agent", model: llm, tools: [tool]) }
 
       it "answers a question with a tool" do
-        expect(agent.execute("What is the price of Bitcoin?")).to eq("The price of Bitcoin is $107,000.")
-        expect(agent.execute("What is the price of Ethereum?")).to eq("The price of Ethereum is $6,000.")
+        expect(agent.run("What is the price of Bitcoin?")).to eq("The price of Bitcoin is $107,000.")
+        expect(agent.run("What is the price of Ethereum?")).to eq("The price of Ethereum is $6,000.")
       end
 
       it "stores messages within a session" do
-        agent.execute("What is the price of Bitcoin?")
+        agent.run("What is the price of Bitcoin?")
 
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "price_tool - Get the price of cryptocurrencies") },
@@ -232,7 +232,7 @@ RSpec.describe Regent::Agent, :vcr do
       end
 
       it "stores session history" do
-        agent.execute("What is the price of Bitcoin?")
+        agent.run("What is the price of Bitcoin?")
 
         expect(agent.session.spans.count).to eq(5)
         expect(agent.session.spans.first.type).to eq(Regent::Span::Type::INPUT)

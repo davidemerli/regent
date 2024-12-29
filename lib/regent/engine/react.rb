@@ -51,7 +51,7 @@ module Regent
         session.exec(Span::Type::LLM_CALL, type: llm.model, message: session.messages.last[:content]) do
           result = llm.invoke(session.messages, stop: [SEQUENCES[:stop]])
 
-          session.current_span.set_meta("#{result.usage.input_tokens} → #{result.usage.output_tokens} tokens")
+          session.current_span.set_meta("#{result.input_tokens} → #{result.output_tokens} tokens")
           result.content
         end
       end

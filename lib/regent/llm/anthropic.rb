@@ -12,11 +12,17 @@ module Regent
         response = client.messages(parameters: {
           messages: format_messages(messages),
           system: system_instruction(messages),
-          model: options[:model],
+          model: model,
           stop_sequences: args[:stop] ? args[:stop] : nil,
           max_tokens: MAX_TOKENS
         })
-        format_response(response)
+
+        result(
+          model: model,
+          content: response.dig("content", 0, "text"),
+          input_tokens: response.dig("usage", "input_tokens"),
+          output_tokens: response.dig("usage", "output_tokens")
+        )
       end
 
       private
@@ -31,17 +37,6 @@ module Regent
 
       def format_messages(messages)
         messages.reject { |message| message[:role].to_s == "system" }
-      end
-
-      def format_response(response)
-        Response.new(
-          content: response.dig("content", 0, "text"),
-          model: options[:model],
-          usage: Usage.new(
-            input_tokens: response.dig("usage", "input_tokens"),
-            output_tokens: response.dig("usage", "output_tokens")
-          )
-        )
       end
     end
   end

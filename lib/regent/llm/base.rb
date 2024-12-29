@@ -2,53 +2,30 @@
 
 module Regent
   class LLM
-    class Response
-      def initialize(content:, usage:, model:)
-        @content = content
-        @usage = usage
-        @model = model
-      end
-
-      attr_reader :content, :usage, :model
-    end
-
-    class Usage
-      def initialize(input_tokens:, output_tokens:)
-        @input_tokens = input_tokens
-        @output_tokens = output_tokens
-      end
-
-      attr_reader :input_tokens, :output_tokens
-    end
+    Result = Struct.new(:model, :content, :input_tokens, :output_tokens, keyword_init: true)
 
     class Base
       include Concerns::Dependable
 
-      def initialize(**options)
+      def initialize(model:, api_key: nil, **options)
+        @model = model
+        @api_key = api_key || api_key_from_env
         @options = options
-        api_key.nil?
 
         super()
       end
 
-      def invoke(messages, **args)
-        provider.chat(messages: format_messages(messages), **args)
-      end
-
       private
 
-      attr_reader :options, :dependency
+      attr_reader :model, :api_key, :options
 
-      def format_response(response)
-        Response.new(
-          content: response.chat_completion,
-          model: options[:model],
-          usage: Usage.new(input_tokens: response.prompt_tokens, output_tokens: response.completion_tokens)
+      def result(model:, content:, input_tokens:, output_tokens:)
+        Result.new(
+          model: model,
+          content: content,
+          input_tokens: input_tokens,
+          output_tokens: output_tokens
         )
-      end
-
-      def api_key
-        @api_key ||= options[:api_key] || api_key_from_env
       end
 
       def api_key_from_env

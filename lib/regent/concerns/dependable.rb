@@ -34,6 +34,8 @@ module Regent
 
       private
 
+      attr_reader :dependency
+
       def load_dependency(name)
         gem(name)
 

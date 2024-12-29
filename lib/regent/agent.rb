@@ -6,11 +6,12 @@ module Regent
 
     DEFAULT_MAX_ITERATIONS = 10
 
-    def initialize(context, model:, tools: [], **options)
+    def initialize(context, model:, tools: [], engine: Regent::Engine::React, **options)
       super()
 
       @context = context
       @model = model
+      @engine = engine
       @sessions = []
       @tools = tools.is_a?(Toolchain) ? tools : Toolchain.new(Array(tools))
       @max_iterations = options[:max_iterations] || DEFAULT_MAX_ITERATIONS
@@ -22,7 +23,7 @@ module Regent
       raise ArgumentError, "Task cannot be empty" if task.to_s.strip.empty?
 
       start_session
-      react.reason(task)
+      reason(task)
     ensure
       complete_session
     end
@@ -37,6 +38,10 @@ module Regent
 
     private
 
+    def reason(task)
+      engine.reason(task)
+    end
+
     def start_session
       complete_session
       @sessions << Session.new
@@ -47,8 +52,8 @@ module Regent
       session&.complete if running?
     end
 
-    def react
-      Regent::Engine::React.new(context, model, tools, session, @max_iterations)
+    def engine
+      @engine.new(context, model, tools, session, @max_iterations)
     end
   end
 end

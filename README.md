@@ -77,12 +77,7 @@ agent = Regent::Agent.new(
 )
 
 # Execute a query
-result = agent.run("What's the weather like in Tokyo?")
-
-result.content # => "It is currently 72°F and sunny in Tokyo."
-result.model # => "gpt-4o"
-result.input_tokens # => 10
-result.output_tokens # => 10
+agent.run("What's the weather like in Tokyo?") # => "It is currently 72°F and sunny in Tokyo."
 ```
 
 ## Why Regent?

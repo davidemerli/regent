@@ -20,7 +20,7 @@ module Regent
     attr_reader :model, :options
 
     def invoke(messages, **args)
-      response = provider.invoke(messages, **args)
+      provider.invoke(messages, **args)
     end
 
     private

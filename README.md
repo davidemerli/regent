@@ -3,6 +3,7 @@
 <div align="center">
 
 # Regent
+
 [![Gem Version](https://badge.fury.io/rb/regent.svg)](https://badge.fury.io/rb/regent)
 [![Build](https://github.com/alchaplinsky/regent/actions/workflows/main.yml/badge.svg)](https://github.com/alchaplinsky/regent/actions/workflows/main.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -55,7 +56,7 @@ Create your first agent:
 
 ```ruby
 # Initialize the LLM
-llm = Regent::LLM.new("gpt-4o")
+model = Regent::LLM.new("gpt-4o")
 
 # Create a custom tool
 class WeatherTool < Regent::Tool
@@ -68,7 +69,7 @@ end
 # Create and configure the agent
 agent = Regent::Agent.new(
   "You are a helpful weather assistant",
-  llm: llm,
+  model: model,
   tools: [WeatherTool.new(
     name: "weather_tool",
     description: "Get current weather for a location"
@@ -76,10 +77,15 @@ agent = Regent::Agent.new(
 )
 
 # Execute a query
-result = agent.execute("What's the weather like in Tokyo?") # => "It is currently 72°F and sunny in Tokyo."
+result = agent.execute("What's the weather like in Tokyo?")
+result.content # => "It is currently 72°F and sunny in Tokyo."
+result.model # => "gpt-4o"
+result.input_tokens # => 10
+result.output_tokens # => 10
 ```
 
 ## Why Regent?
+
 - **Transparent Decision Making**: Watch your agent's thought process as it reasons through problems
 - **Flexible Architecture**: Easy to extend with custom tools and adapt to different use cases
 - **Production Ready**: Built with tracing, error handling, and clean abstractions

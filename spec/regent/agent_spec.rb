@@ -2,7 +2,7 @@
 
 RSpec.describe Regent::Agent, :vcr do
   let(:llm) { Regent::LLM.new(model) }
-  let(:agent) { Regent::Agent.new("You are an AI agent", llm: llm) }
+  let(:agent) { Regent::Agent.new("You are an AI agent", model: llm) }
   let(:tool) { PriceTool.new(name: 'price_tool', description: 'Get the price of cryptocurrencies') }
   let(:spinner) { double("spinner", auto_spin: nil, update: nil, success: nil, error: nil) }
   class PriceTool < Regent::Tool
@@ -76,7 +76,7 @@ RSpec.describe Regent::Agent, :vcr do
 
     context "with a tool" do
       let(:cassette) { "Regent_Agent/OpenAI/answers_a_question_with_a_tool" }
-      let(:agent) { Regent::Agent.new("You are an AI agent", llm: llm, tools: [tool]) }
+      let(:agent) { Regent::Agent.new("You are an AI agent", model: llm, tools: [tool]) }
 
       it "answers a question with a tool" do
         expect(agent.execute("What is the price of Bitcoin?")).to eq("The price of Bitcoin is $107,000.")
@@ -144,7 +144,7 @@ RSpec.describe Regent::Agent, :vcr do
 
     context "with a tool" do
       let(:cassette) { "Regent_Agent/Anthropic/answers_a_question_with_a_tool" }
-      let(:agent) { Regent::Agent.new("You are an AI agent", llm: llm, tools: [tool]) }
+      let(:agent) { Regent::Agent.new("You are an AI agent", model: llm, tools: [tool]) }
 
       it "answers a question with a tool" do
         expect(agent.execute("What is the price of Bitcoin?")).to eq("The current price of Bitcoin (BTC) is $107,000.")
@@ -212,7 +212,7 @@ RSpec.describe Regent::Agent, :vcr do
 
     context "with a tool" do
       let(:cassette) { "Regent_Agent/Google_Gemini/answers_a_question_with_a_tool" }
-      let(:agent) { Regent::Agent.new("You are an AI agent", llm: llm, tools: [tool]) }
+      let(:agent) { Regent::Agent.new("You are an AI agent", model: llm, tools: [tool]) }
 
       it "answers a question with a tool" do
         expect(agent.execute("What is the price of Bitcoin?")).to eq("The price of Bitcoin is $107,000.")

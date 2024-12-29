@@ -14,16 +14,18 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - '3.3.4'
+          - "3.3.4"
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
-      env:
-        OPENAI_API_KEY: OPENAI_API_KEY
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run the default task
+        run: bundle exec rake
+        env:
+          OPENAI_API_KEY: OPENAI_API_KEY
+          GEMINI_API_KEY: GEMINI_API_KEY
+          ANTHROPIC_API_KEY: ANTHROPIC_API_KEY

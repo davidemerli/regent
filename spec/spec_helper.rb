@@ -10,6 +10,8 @@ VCR.configure do |config|
 
   # Filter out sensitive data like API keys
   config.filter_sensitive_data('<OPENAI_API_KEY>') { ENV['OPENAI_API_KEY'] }
+  config.filter_sensitive_data('<ANTHROPIC_API_KEY>') { ENV['ANTHROPIC_API_KEY'] }
+  config.filter_sensitive_data('<GEMINI_API_KEY>') { ENV['GEMINI_API_KEY'] }
 end
 
 RSpec.configure do |config|

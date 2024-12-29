@@ -1,0 +1,122 @@
+---
+http_interactions:
+  - request:
+      method: post
+      uri: https://api.openai.com/v1/chat/completions
+      body:
+        encoding: UTF-8
+        string:
+          '{"messages":[{"role":"system","content":"You are assisstant reasoning
+          step-by-step to solve complex problems.\nYour reasoning process happens in
+          a loop of Though, Action, Observation.\nThought - a description of your thoughts
+          about the question.\nAction - pick a an action from available tools.\nObservation
+          - is the result of running a tool.\n\n## Available tools:\n\n\n## Example
+          session\nQuestion: What is the weather in London today?\nThought: I need to
+          get the wether in London\nAction: weather_tool | \"London\"\nPAUSE\n\nYou
+          will have a response with Observation:\nObservation: It is 32 degress and
+          Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
+          I know the final answer\nAnswer: It is 32 degress and Sunny in London\n"},{"role":"user","content":"What
+          is the capital of Japan"}],"model":"gpt-4o","temperature":0.0,"n":1}'
+      headers:
+        Content-Type:
+          - application/json
+        Authorization:
+          - Bearer <OPENAI_API_KEY>
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Date:
+          - Sun, 22 Dec 2024 10:14:15 GMT
+        Content-Type:
+          - application/json
+        Transfer-Encoding:
+          - chunked
+        Connection:
+          - keep-alive
+        Access-Control-Expose-Headers:
+          - X-Request-ID
+        Openai-Organization:
+          - favia-czx6t5
+        Openai-Processing-Ms:
+          - "1035"
+        Openai-Version:
+          - "2020-10-01"
+        X-Ratelimit-Limit-Requests:
+          - "5000"
+        X-Ratelimit-Limit-Tokens:
+          - "4000000"
+        X-Ratelimit-Remaining-Requests:
+          - "4999"
+        X-Ratelimit-Remaining-Tokens:
+          - "3999802"
+        X-Ratelimit-Reset-Requests:
+          - 12ms
+        X-Ratelimit-Reset-Tokens:
+          - 2ms
+        X-Request-Id:
+          - req_aeed211c5997c595d70d67e67a1d99c9
+        Strict-Transport-Security:
+          - max-age=31536000; includeSubDomains; preload
+        Cf-Cache-Status:
+          - DYNAMIC
+        Set-Cookie:
+          - __cf_bm=s1KVbM9HLzy2IZghijPPsaUk3I5LTqGmtqpHRYtpAdw-1734862455-1.0.1.1-6X8Mr2IdxffMT2iKN2WT7diHKqaJ1zZOVD6.hUXFGMmC7m03eZGcuQSVY2sGp_FfYOYxXbd3zrhQwrjLNtJmSg;
+            path=/; expires=Sun, 22-Dec-24 10:44:15 GMT; domain=.api.openai.com; HttpOnly;
+            Secure; SameSite=None
+          - _cfuvid=TNxM4eBmEkoIe0q8UuBFR9xcBzzeZPmpfl4jkLjbV6I-1734862455129-0.0.1.1-604800000;
+            path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+        X-Content-Type-Options:
+          - nosniff
+        Server:
+          - cloudflare
+        Cf-Ray:
+          - 8f5f57fe5fd377b9-KBP
+        Alt-Svc:
+          - h3=":443"; ma=86400
+      body:
+        encoding: ASCII-8BIT
+        string: |
+          {
+            "id": "chatcmpl-AhDGQtYpcLAYPJpe7aapf6XdJX0vD",
+            "object": "chat.completion",
+            "created": 1734862454,
+            "model": "gpt-4o-mini-2024-07-18",
+            "choices": [
+              {
+                "index": 0,
+                "message": {
+                  "role": "assistant",
+                  "content": "Thought: I need to find out what the capital of Japan is. \nAction: I will recall my knowledge about countries and their capitals. \nObservation: The capital of Japan is Tokyo. \n\nThought: I have the answer now.\nAnswer: The capital of Japan is Tokyo.",
+                  "refusal": null
+                },
+                "logprobs": null,
+                "finish_reason": "stop"
+              }
+            ],
+            "usage": {
+              "prompt_tokens": 170,
+              "completion_tokens": 57,
+              "total_tokens": 227,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "audio_tokens": 0
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+              }
+            },
+            "system_fingerprint": "fp_0aa8d3e20b"
+          }
+    recorded_at: Sun, 22 Dec 2024 10:14:14 GMT
+recorded_with: VCR 6.3.1

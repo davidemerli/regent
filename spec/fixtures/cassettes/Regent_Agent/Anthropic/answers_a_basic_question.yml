@@ -1,0 +1,94 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: UTF-8
+      string: '{"messages":[{"role":"user","content":"What is the capital of Japan?"}],"system":"##
+        Instructions\nConsider the following context: You are an AI agent\n\n\nYou
+        are an AI agent reasoning step-by-step to solve complex problems.\nYour reasoning
+        process happens in a loop of Thought, Action, Observation.\nThought - a description
+        of your thoughts about the question.\nAction - pick a an action from available
+        tools. If there are no tools that can help return an Answer saying you are
+        not able to help.\nObservation - is the result of running a tool.\nPAUSE -
+        is always present after an Action.\n\n## Available tools:\n\n\n## Example
+        session\nQuestion: What is the weather in London today?\nThought: I need to
+        get current weather in London\nAction: weather_tool | London\nPAUSE\n\nYou
+        will have a response form a user with Observation:\nObservation: It is 32
+        degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
+        I know the final answer\nAnswer: It is 32 degress and Sunny in London\n","model":"claude-3-5-sonnet-20240620","stop_sequences":["PAUSE"],"max_tokens":1000}'
+    headers:
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 29 Dec 2024 10:13:02 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Anthropic-Ratelimit-Requests-Limit:
+      - '50'
+      Anthropic-Ratelimit-Requests-Remaining:
+      - '49'
+      Anthropic-Ratelimit-Requests-Reset:
+      - '2024-12-29T10:13:01Z'
+      Anthropic-Ratelimit-Input-Tokens-Limit:
+      - '40000'
+      Anthropic-Ratelimit-Input-Tokens-Remaining:
+      - '40000'
+      Anthropic-Ratelimit-Input-Tokens-Reset:
+      - '2024-12-29T10:13:02Z'
+      Anthropic-Ratelimit-Output-Tokens-Limit:
+      - '8000'
+      Anthropic-Ratelimit-Output-Tokens-Remaining:
+      - '8000'
+      Anthropic-Ratelimit-Output-Tokens-Reset:
+      - '2024-12-29T10:13:02Z'
+      Anthropic-Ratelimit-Tokens-Limit:
+      - '48000'
+      Anthropic-Ratelimit-Tokens-Remaining:
+      - '48000'
+      Anthropic-Ratelimit-Tokens-Reset:
+      - '2024-12-29T10:13:02Z'
+      Request-Id:
+      - req_01UmqcXnBB4X4bnrMVUm1wz8
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      X-Robots-Tag:
+      - none
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8f9903d76d7dbbdb-WAW
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msg_01XTNFpQSJMAtniMYm1hB5vW","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
+        To answer this question, I need to recall basic geographical knowledge about
+        Japan. This is a straightforward factual question that doesn''t require any
+        special tools or complex reasoning.\n\nAnswer: The capital of Japan is Tokyo.\n\nTokyo
+        has been the capital of Japan since 1868, when it replaced the former capital,
+        Kyoto. It is not only the political center of Japan but also its economic
+        and cultural hub, being one of the world''s largest and most populous metropolitan
+        areas."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":237,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":104}}'
+  recorded_at: Sun, 29 Dec 2024 10:13:02 GMT
+recorded_with: VCR 6.3.1

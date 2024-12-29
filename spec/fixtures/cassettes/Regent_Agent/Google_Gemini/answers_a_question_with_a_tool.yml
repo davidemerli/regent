@@ -1,0 +1,335 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=<GEMINI_API_KEY>
+    body:
+      encoding: UTF-8
+      string: '{"contents":[{"role":"user","parts":[{"text":"## Instructions\nConsider
+        the following context: You are an AI agent\n\n\nYou are an AI agent reasoning
+        step-by-step to solve complex problems.\nYour reasoning process happens in
+        a loop of Thought, Action, Observation.\nThought - a description of your thoughts
+        about the question.\nAction - pick a an action from available tools if required.
+        If there are no tools that can help return an Answer saying you are not able
+        to help.\nObservation - is the result of running a tool.\nPAUSE - is always
+        present after an Action.\n\n## Available tools:\nprice_tool - Get the price
+        of cryptocurrencies\n\n## Example session\nQuestion: What is the weather in
+        London today?\nThought: I need to get current weather in London\nAction: weather_tool
+        | London\nPAUSE\n\nYou will have a response form a user with Observation:\nObservation:
+        It is 32 degress and Sunny\n\n... (this Thought/Action/Observation can repeat
+        N times)\n\nThought: I know the final answer\nAnswer: It is 32 degress and
+        Sunny in London\n"}]},{"role":"user","parts":[{"text":"What is the price of
+        Bitcoin?"}]}]}'
+    headers:
+      User-Agent:
+      - Faraday v2.12.2
+      Content-Type:
+      - application/json
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sun, 29 Dec 2024 10:50:38 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Content-Length:
+      - '295'
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Server-Timing:
+      - gfet4t7; dur=1557
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "Thought: I need to find the current price of Bitcoin.\nAction: price_tool | Bitcoin\nPAUSE\n"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -0.086450483487999955
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 232,
+            "candidatesTokenCount": 23,
+            "totalTokenCount": 255
+          },
+          "modelVersion": "gemini-1.5-pro-002"
+        }
+  recorded_at: Sun, 29 Dec 2024 10:50:38 GMT
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=<GEMINI_API_KEY>
+    body:
+      encoding: UTF-8
+      string: '{"contents":[{"role":"user","parts":[{"text":"## Instructions\nConsider
+        the following context: You are an AI agent\n\n\nYou are an AI agent reasoning
+        step-by-step to solve complex problems.\nYour reasoning process happens in
+        a loop of Thought, Action, Observation.\nThought - a description of your thoughts
+        about the question.\nAction - pick a an action from available tools if required.
+        If there are no tools that can help return an Answer saying you are not able
+        to help.\nObservation - is the result of running a tool.\nPAUSE - is always
+        present after an Action.\n\n## Available tools:\nprice_tool - Get the price
+        of cryptocurrencies\n\n## Example session\nQuestion: What is the weather in
+        London today?\nThought: I need to get current weather in London\nAction: weather_tool
+        | London\nPAUSE\n\nYou will have a response form a user with Observation:\nObservation:
+        It is 32 degress and Sunny\n\n... (this Thought/Action/Observation can repeat
+        N times)\n\nThought: I know the final answer\nAnswer: It is 32 degress and
+        Sunny in London\n"}]},{"role":"user","parts":[{"text":"What is the price of
+        Bitcoin?"}]},{"role":"assistant","parts":[{"text":"Thought: I need to find
+        the current price of Bitcoin.\nAction: price_tool | Bitcoin\nPAUSE"}]},{"role":"user","parts":[{"text":"Observation:
+        {''BTC'': ''$107,000'', ''ETH'': ''$6,000''}"}]}]}'
+    headers:
+      User-Agent:
+      - Faraday v2.12.2
+      Content-Type:
+      - application/json
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sun, 29 Dec 2024 10:50:39 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Content-Length:
+      - '289'
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Server-Timing:
+      - gfet4t7; dur=1077
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "Thought: I have the price of Bitcoin.\nAnswer: The price of Bitcoin is $107,000.\n"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -0.00019146005312601724
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 280,
+            "candidatesTokenCount": 27,
+            "totalTokenCount": 307
+          },
+          "modelVersion": "gemini-1.5-pro-002"
+        }
+  recorded_at: Sun, 29 Dec 2024 10:50:39 GMT
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=<GEMINI_API_KEY>
+    body:
+      encoding: UTF-8
+      string: '{"contents":[{"role":"user","parts":[{"text":"## Instructions\nConsider
+        the following context: You are an AI agent\n\n\nYou are an AI agent reasoning
+        step-by-step to solve complex problems.\nYour reasoning process happens in
+        a loop of Thought, Action, Observation.\nThought - a description of your thoughts
+        about the question.\nAction - pick a an action from available tools if required.
+        If there are no tools that can help return an Answer saying you are not able
+        to help.\nObservation - is the result of running a tool.\nPAUSE - is always
+        present after an Action.\n\n## Available tools:\nprice_tool - Get the price
+        of cryptocurrencies\n\n## Example session\nQuestion: What is the weather in
+        London today?\nThought: I need to get current weather in London\nAction: weather_tool
+        | London\nPAUSE\n\nYou will have a response form a user with Observation:\nObservation:
+        It is 32 degress and Sunny\n\n... (this Thought/Action/Observation can repeat
+        N times)\n\nThought: I know the final answer\nAnswer: It is 32 degress and
+        Sunny in London\n"}]},{"role":"user","parts":[{"text":"What is the price of
+        Ethereum?"}]}]}'
+    headers:
+      User-Agent:
+      - Faraday v2.12.2
+      Content-Type:
+      - application/json
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sun, 29 Dec 2024 10:50:40 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Content-Length:
+      - '297'
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Server-Timing:
+      - gfet4t7; dur=986
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "Thought: I need to get the current price of Ethereum.\nAction: price_tool | Ethereum\nPAUSE\n"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -0.0087441717800886727
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 232,
+            "candidatesTokenCount": 23,
+            "totalTokenCount": 255
+          },
+          "modelVersion": "gemini-1.5-pro-002"
+        }
+  recorded_at: Sun, 29 Dec 2024 10:50:40 GMT
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=<GEMINI_API_KEY>
+    body:
+      encoding: UTF-8
+      string: '{"contents":[{"role":"user","parts":[{"text":"## Instructions\nConsider
+        the following context: You are an AI agent\n\n\nYou are an AI agent reasoning
+        step-by-step to solve complex problems.\nYour reasoning process happens in
+        a loop of Thought, Action, Observation.\nThought - a description of your thoughts
+        about the question.\nAction - pick a an action from available tools if required.
+        If there are no tools that can help return an Answer saying you are not able
+        to help.\nObservation - is the result of running a tool.\nPAUSE - is always
+        present after an Action.\n\n## Available tools:\nprice_tool - Get the price
+        of cryptocurrencies\n\n## Example session\nQuestion: What is the weather in
+        London today?\nThought: I need to get current weather in London\nAction: weather_tool
+        | London\nPAUSE\n\nYou will have a response form a user with Observation:\nObservation:
+        It is 32 degress and Sunny\n\n... (this Thought/Action/Observation can repeat
+        N times)\n\nThought: I know the final answer\nAnswer: It is 32 degress and
+        Sunny in London\n"}]},{"role":"user","parts":[{"text":"What is the price of
+        Ethereum?"}]},{"role":"assistant","parts":[{"text":"Thought: I need to get
+        the current price of Ethereum.\nAction: price_tool | Ethereum\nPAUSE"}]},{"role":"user","parts":[{"text":"Observation:
+        {''BTC'': ''$107,000'', ''ETH'': ''$6,000''}"}]}]}'
+    headers:
+      User-Agent:
+      - Faraday v2.12.2
+      Content-Type:
+      - application/json
+      Expect:
+      - ''
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Content-Encoding:
+      - gzip
+      Date:
+      - Sun, 29 Dec 2024 10:50:41 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Content-Length:
+      - '287'
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Server-Timing:
+      - gfet4t7; dur=1032
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "Thought: I have the price of Ethereum.\nAnswer: The price of Ethereum is $6,000.\n"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "avgLogprobs": -0.0002099161222577095
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 280,
+            "candidatesTokenCount": 25,
+            "totalTokenCount": 305
+          },
+          "modelVersion": "gemini-1.5-pro-002"
+        }
+  recorded_at: Sun, 29 Dec 2024 10:50:41 GMT
+recorded_with: VCR 6.3.1

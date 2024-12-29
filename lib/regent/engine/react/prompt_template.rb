@@ -11,7 +11,7 @@ module Regent
             You are an AI agent reasoning step-by-step to solve complex problems.
             Your reasoning process happens in a loop of Thought, Action, Observation.
             Thought - a description of your thoughts about the question.
-            Action - pick a an action from available tools. If there are no tools that can help return an Answer saying you are not able to help.
+            Action - pick a an action from available tools if required. If there are no tools that can help return an Answer saying you are not able to help.
             Observation - is the result of running a tool.
             PAUSE - is always present after an Action.
 

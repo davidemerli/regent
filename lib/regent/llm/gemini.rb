@@ -19,6 +19,10 @@ module Regent
         )
       end
 
+      def parse_error(error)
+        JSON.parse(error.response.dig(:body)).dig("error", "message")
+      end
+
       private
 
       def client

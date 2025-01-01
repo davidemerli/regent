@@ -15,6 +15,10 @@ module Regent
         super()
       end
 
+      def parse_error(error)
+        error.response.dig(:body, "error", "message")
+      end
+
       private
 
       attr_reader :model, :api_key, :options

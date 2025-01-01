@@ -11,6 +11,7 @@ module Regent
         response = client.chat(parameters: {
           messages: messages,
           model: model,
+          temperature: args[:temperature] || 0.0,
           stop: args[:stop]
         })
 

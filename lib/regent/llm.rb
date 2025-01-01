@@ -2,6 +2,7 @@
 
 module Regent
   class LLM
+    DEFAULT_RETRY_COUNT = 3
     PROVIDER_PATTERNS = {
       OpenAI: /^gpt-/,
       Gemini: /^gemini-/,
@@ -10,9 +11,11 @@ module Regent
 
     class ProviderNotFoundError < StandardError; end
     class APIKeyNotFoundError < StandardError; end
+    class ApiError < StandardError; end
 
-    def initialize(model, **options)
+    def initialize(model, strict_mode: true, **options)
       @model = model
+      @strict_mode = strict_mode
       @options = options
       instantiate_provider
     end
@@ -20,12 +23,20 @@ module Regent
     attr_reader :model, :options
 
     def invoke(messages, **args)
+      retries = 0
       provider.invoke(messages, **args)
+
+    rescue Faraday::Error => error
+      if error.respond_to?(:retryable?) && error.retryable? && retries < DEFAULT_RETRY_COUNT
+        sleep(exponential_backoff(retries))
+        retry
+      end
+      handle_error(error)
     end
 
     private
 
-    attr_reader :provider
+    attr_reader :provider, :strict_mode
 
     def instantiate_provider
       provider_class = find_provider_class
@@ -40,6 +51,17 @@ module Regent
 
     def create_provider(provider_class)
       Regent::LLM.const_get(provider_class).new(**options.merge(model: model))
+    end
+
+    def handle_error(error)
+      message = provider.parse_error(error) || error.message
+      raise ApiError, message if strict_mode
+      Result.new(model: model, content: message, input_tokens: nil, output_tokens: nil)
+    end
+
+    def exponential_backoff(retry_count)
+      # Exponential backoff with jitter: 2^n * 100ms + random jitter
+      (2**retry_count * 0.1) + rand(0.1)
     end
   end
 end

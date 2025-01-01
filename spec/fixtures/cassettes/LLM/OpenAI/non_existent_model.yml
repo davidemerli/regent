@@ -1,0 +1,67 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: UTF-8
+      string: '{"messages":[{"role":"user","content":"What is the capital of Japan?"}],"model":"gpt-4.1o-mini","temperature":0.0,"stop":null}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <OPENAI_API_KEY>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Wed, 01 Jan 2025 22:43:05 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+      X-Request-Id:
+      - req_0771c41da640cfe3b0a128ba32606627
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=Mn7zpswiYcoQNyTawRH2PIlgNgX7SVp3K_lyCparwMA-1735771385-1.0.1.1-r6kttiCiP6Tv6ss.1DhxDIx345hQeInSOstsdFbBscadaG2iXJjmgm89a3X4dPMoe65JxhdFwxeQmoKotXV4Zw;
+        path=/; expires=Wed, 01-Jan-25 23:13:05 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=ihUOSSEN7_GnteVTob0tDtBuaY0F.neYoIge4gtB6Ak-1735771385502-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8fb606b5cd533534-WAW
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+            "error": {
+                "message": "The model `gpt-4.1o-mini` does not exist or you do not have access to it.",
+                "type": "invalid_request_error",
+                "param": null,
+                "code": "model_not_found"
+            }
+        }
+  recorded_at: Wed, 01 Jan 2025 22:43:05 GMT
+recorded_with: VCR 6.3.1

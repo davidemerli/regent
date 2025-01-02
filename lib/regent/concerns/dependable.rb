@@ -25,7 +25,7 @@ module Regent
 
         super()
       rescue Gem::LoadError
-        warn_and_exit(dependency, options[:model])
+        Regent::Logger.warn_and_exit dependency_warning(dependency, model)
       end
 
       def require_dynamic(*names)
@@ -65,9 +65,8 @@ module Regent
         Bundler.load.dependencies
       end
 
-      def warn_and_exit(name, model)
-        warn "\n\e[33mIn order to use \e[33;1m#{model}\e[0m\e[33m model you need to install \e[33;1m#{name}\e[0m\e[33m gem. Please add \e[33;1mgem \"#{name}\"\e[0m\e[33m to your Gemfile.\e[0m"
-        exit 1
+      def dependency_warning(dependency, model)
+        "\n\e[33mIn order to use \e[33;1m#{model}\e[0m\e[33m model you need to install \e[33;1m#{dependency}\e[0m\e[33m gem. Please add \e[33;1mgem \"#{dependency}\"\e[0m\e[33m to your Gemfile.\e[0m"
       end
     end
   end

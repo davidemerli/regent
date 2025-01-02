@@ -102,17 +102,18 @@ RSpec.describe Regent::LLM do
 
   context "Missing model dependency" do
     let(:model) { "claude-3-5-sonnet-20240620" }
-    let(:instance) { double(Regent::LLM::Base, warn_and_exit: nil) }
 
     before do
-      allow(Regent::LLM::Base).to receive(:new).and_return(instance)
-      allow_any_instance_of(Regent::LLM::Base).to receive(:gem).with("anthropic").and_raise(Gem::LoadError)
+      allow(Regent::Logger).to receive(:warn_and_exit).and_return(true)
+      allow_any_instance_of(Regent::LLM::Anthropic).to receive(:gem).with("anthropic").and_raise(Gem::LoadError)
     end
 
-    xit "warns and exists if the dependency is not installed" do
+    it "warns and exists if the dependency is not installed" do
       subject
 
-      expect(instance).to have_received(:warn_and_exit).with("anthropic", "claude-3-5-sonnet-20240620")
+      expect(Regent::Logger).to have_received(:warn_and_exit).with(
+         /\n.*In order to use .*claude-3-5-sonnet-20240620.* model you need to install .*anthropic.* gem. Please add .*gem "anthropic".* to your Gemfile.*/
+      )
     end
   end
 end

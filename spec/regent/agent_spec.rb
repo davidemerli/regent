@@ -49,26 +49,22 @@ RSpec.describe Regent::Agent, :vcr do
           allow(TTY::Spinner).to receive(:new).and_return(spinner)
         end
 
-        xit "logs steps in the console" do
+        it "logs steps in the console" do
           agent.run("What is the capital of Japan?")
 
           # Input
           expect(spinner).to have_received(:update).with(
-            title: /INPUT.*What is the capital of Japan?/
+            title: /\[.*?INPUT.*?\].*?What is the capital of Japan\?/
           ).exactly(2).times
 
           # LLM Call
           expect(spinner).to have_received(:update).with(
-            title: /LLM.*gpt-4o-mini\] What is the capital of Japan?/
-          )
+            title: /\[.*?LLM.*?❯.*?gpt-4o-mini.*?\].*?What is the capital of Japan\?/
+          ).exactly(2).times
 
-          # LLM Call response
-          expect(spinner).to have_received(:update).with(
-            title: "\e[2m[\e[0m\e[36mLLM\e[0m\e[2m ❯\e[0m \e[33mgpt-4o-mini\e[0m\e[2m]\e[0m\e[2m[170 → 57 tokens]\e[0m\e[2m[0.01s]\e[0m\e[2m:\e[0m\e[0m What is the capital of Japan?\e[0m"
-          )
           # Answer
           expect(spinner).to have_received(:update).with(
-            title: "\e[2m[\e[0m\e[36mANSWER\e[0m\e[2m ❯\e[0m \e[33msuccess\e[0m\e[2m]\e[0m\e[2m[0.01s]\e[0m\e[2m:\e[0m\e[0m The capital of Japan is Tokyo.\e[0m"
+            title: /\[.*?ANSWER.*?\].*?\[.*?0\.\d*s.*?\].*?The capital of Japan is Tokyo\./
           ).exactly(2).times
         end
       end

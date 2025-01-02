@@ -4,6 +4,13 @@ module Regent
   class Logger
     COLORS = %i[dim green yellow red blue cyan clear].freeze
 
+    class << self
+      def warn_and_exit(message)
+        warn message
+        exit 1
+      end
+    end
+
     def initialize(output: $stdout)
       @pastel = Pastel.new
       @spinner = build_spinner(spinner_symbol, output)
@@ -14,7 +21,6 @@ module Regent
 
     def info(label:, message:, duration: nil, type: nil, meta: nil, top_level: false)
       current_spinner = top_level ? spinner : nested_spinner
-
       current_spinner.update(title: format_message(label, message, duration, type, meta))
       current_spinner
     end

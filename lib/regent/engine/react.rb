@@ -68,7 +68,7 @@ module Regent
 
       def process_tool_execution(tool, argument)
         result = session.exec(Span::Type::TOOL_EXECUTION, { type: tool.name, message: argument }) do
-          tool.call(argument)
+          tool.execute(argument)
         end
 
         session.add_message({ role: :user, content: "#{SEQUENCES[:observation]} #{result}" })

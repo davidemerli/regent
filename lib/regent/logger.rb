@@ -2,7 +2,7 @@
 
 module Regent
   class Logger
-    COLORS = %i[dim green yellow red blue cyan clear].freeze
+    COLORS = %i[dim white green yellow red blue cyan clear].freeze
 
     class << self
       def warn_and_exit(message)
@@ -53,7 +53,7 @@ module Regent
     end
 
     def spinner_symbol
-      "#{dim("[")}#{green(":spinner")}#{dim("]")}"
+      "#{dim("[")}#{white(":spinner")}#{dim("]")}"
     end
 
     def build_spinner(spinner_format, output)

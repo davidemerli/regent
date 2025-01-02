@@ -43,7 +43,8 @@ module Regent
     def run
       @output = log_operation do
         yield
-      rescue StandardError => e
+
+      rescue StandardError, ToolError => e
         logger.error(label: type, message: e.message, **arguments)
         raise
       end

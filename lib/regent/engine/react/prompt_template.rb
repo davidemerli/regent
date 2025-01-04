@@ -13,7 +13,7 @@ module Regent
             Thought - a description of your thoughts about the question.
             Action - pick a an action from available tools if required. If there are no tools that can help return an Answer saying you are not able to help.
             Observation - is the result of running a tool.
-            PAUSE - is always present after an Action.
+            PAUSE - a stop sequence that will always be present after an Action.
 
             ## Available tools:
             #{tool_list}
@@ -21,7 +21,7 @@ module Regent
             ## Example session
             Question: What is the weather in London today?
             Thought: I need to get current weather in London
-            Action: weather_tool | London
+            Action: {"tool": "weather_tool", "args": ["London"]}
             PAUSE
 
             You will have a response form a user with Observation:

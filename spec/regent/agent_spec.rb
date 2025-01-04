@@ -85,7 +85,7 @@ RSpec.describe Regent::Agent, :vcr do
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "price_tool - Get the price of cryptocurrencies") },
           { role: :user, content: "What is the price of Bitcoin?" },
-          { role: :assistant, content: "Thought: I need to find the current price of Bitcoin. \nAction: price_tool | \"Bitcoin\"\nPAUSE" },
+          { role: :assistant, content: "Thought: I need to get the current price of Bitcoin. \nAction: {\"tool\": \"price_tool\", \"args\": [\"Bitcoin\"]}\n" },
           { role: :user, content: "Observation: {'BTC': '$107,000', 'ETH': '$6,000'}" },
           { role: :assistant, content: "Thought: I have the current price of Bitcoin, which is $107,000. \nAnswer: The price of Bitcoin is $107,000." }
         ])
@@ -153,9 +153,9 @@ RSpec.describe Regent::Agent, :vcr do
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "price_tool - Get the price of cryptocurrencies") },
           { role: :user, content: "What is the price of Bitcoin?" },
-          { role: :assistant, content: "Thought: To answer this question, I need to get the current price of Bitcoin. I can use the price_tool to obtain this information.\n\nAction: price_tool | Bitcoin\n" },
+          { role: :assistant, content: "Thought: To answer this question, I need to get the current price of Bitcoin. I can use the price_tool to obtain this information.\n\nAction: {\"tool\": \"price_tool\", \"args\": [\"Bitcoin\"]}\n" },
           { role: :user, content: "Observation: {'BTC': '$107,000', 'ETH': '$6,000'}" },
-          { role: :assistant, content: "Thought: I have received the price information for Bitcoin (BTC) and Ethereum (ETH). The question specifically asked about Bitcoin, so I'll focus on that.\n\nAnswer: The current price of Bitcoin (BTC) is $107,000." }
+          { role: :assistant, content: "Thought: I have received the current price information for Bitcoin (BTC) and Ethereum (ETH). The question specifically asked for the price of Bitcoin, so I'll focus on that information.\n\nAnswer: The current price of Bitcoin (BTC) is $107,000." }
         ])
       end
 
@@ -221,7 +221,7 @@ RSpec.describe Regent::Agent, :vcr do
         expect(agent.session.messages).to eq([
           { role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt("You are an AI agent", "price_tool - Get the price of cryptocurrencies") },
           { role: :user, content: "What is the price of Bitcoin?" },
-          { role: :assistant, content: "Thought: I need to find the current price of Bitcoin.\nAction: price_tool | Bitcoin\nPAUSE" },
+          { role: :assistant, content: "Thought: I need to get the current price of Bitcoin.\nAction: {\"tool\": \"price_tool\", \"args\": [\"Bitcoin\"]}" },
           { role: :user, content: "Observation: {'BTC': '$107,000', 'ETH': '$6,000'}" },
           { role: :assistant, content: "Thought: I have the price of Bitcoin.\nAnswer: The price of Bitcoin is $107,000." }
         ])

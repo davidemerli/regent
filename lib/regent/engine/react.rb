@@ -2,7 +2,7 @@
 
 module Regent
   module Engine
-    class React
+    class React < Base
       SEQUENCES = {
         answer: "Answer:",
         action: "Action:",
@@ -10,69 +10,28 @@ module Regent
         stop: "PAUSE"
       }.freeze
 
-      def initialize(context, llm, toolchain, session, max_iterations)
-        @context = context
-        @llm = llm
-        @toolchain = toolchain
-        @session = session
-        @max_iterations = max_iterations
-      end
-
-      attr_reader :context, :llm, :toolchain, :session, :max_iterations
-
       def reason(task)
-        initialize_session(task)
+        session.exec(Span::Type::INPUT, top_level: true, message: task) { task }
+        session.add_message({role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt(context, toolchain.to_s)})
+        session.add_message({role: :user, content: task})
 
-        max_iterations.times do |i|
-          content = get_llm_response
+        with_max_iterations do
+          content = llm_call_response(stop: [SEQUENCES[:stop]])
           session.add_message({role: :assistant, content: content })
+
           return extract_answer(content) if answer_present?(content)
 
           if action_present?(content)
-            tool, argument = parse_action(content)
+            tool_name, arguments = parse_tool_signature(content)
+            tool = find_tool(tool_name)
             return unless tool
-
-            process_tool_execution(tool, argument)
+            result = tool_call_response(tool, arguments)
+            session.add_message({ role: :user, content: "#{SEQUENCES[:observation]} #{result}" })
           end
         end
-
-        error_answer("Max iterations reached without finding an answer.")
       end
 
       private
-
-      def initialize_session(task)
-        session.add_message({role: :system, content: Regent::Engine::React::PromptTemplate.system_prompt(context, toolchain.to_s)})
-        session.add_message({role: :user, content: task})
-        session.exec(Span::Type::INPUT, top_level: true, message: task) { task }
-      end
-
-      def get_llm_response
-        session.exec(Span::Type::LLM_CALL, type: llm.model, message: session.messages.last[:content]) do
-          result = llm.invoke(session.messages, stop: [SEQUENCES[:stop]])
-
-          session.current_span.set_meta("#{result.input_tokens} → #{result.output_tokens} tokens")
-          result.content
-        end
-      end
-
-      def extract_answer(content)
-        answer = content.split(SEQUENCES[:answer])[1]&.strip
-        success_answer(answer)
-      end
-
-      def parse_action(content)
-        sanitized_content = content.gsub(SEQUENCES[:stop], "")
-        lookup_tool(sanitized_content)
-      end
-
-      def process_tool_execution(tool, argument)
-        result = session.exec(Span::Type::TOOL_EXECUTION, { type: tool.name, message: argument }) do
-          tool.execute(argument)
-        end
-
-        session.add_message({ role: :user, content: "#{SEQUENCES[:observation]} #{result}" })
-      end
 
       def answer_present?(content)
         content.include?(SEQUENCES[:answer])
@@ -82,39 +41,17 @@ module Regent
         content.include?(SEQUENCES[:action])
       end
 
-      def success_answer(content)
-        session.exec(Span::Type::ANSWER, top_level: true,type: :success, message: content, duration: session.duration.round(2)) { content }
-      end
-
-      def error_answer(content)
-        session.exec(Span::Type::ANSWER, top_level: true, type: :failure, message: content, duration: session.duration.round(2)) { content }
-      end
-
-      def lookup_tool(content)
-        tool_name, argument = parse_tool_signature(content)
-        tool = toolchain.find(tool_name)
-
-        unless tool
-          session.exec(Span::Type::ANSWER, type: :failure, message: "No matching tool found for: #{tool_name}")
-          return [nil, nil]
-        end
-
-        [tool, argument]
+      def extract_answer(content)
+        success_answer content.split(SEQUENCES[:answer])[1]&.strip
       end
 
       def parse_tool_signature(content)
-        action = content.split(SEQUENCES[:action])[1]&.strip
-        return [nil, nil] unless action
+        return [nil, nil] unless match = content.match(/Action:.*?\{.*"tool".*\}/m)
 
-        parts = action.split('|').map(&:strip)
-        tool_name = parts[0].gsub(/["`']/, '')
-        argument = parts[1].gsub(/["`']/, '')
-
-        # Handle cases where argument is nil, empty, or only whitespace
-        argument = nil if argument.nil? || argument.empty?
-
-        [tool_name, argument]
-      rescue
+        # Extract just the JSON part using a second regex
+        json = JSON.parse(match[0].match(/\{.*\}/m)[0])
+        [json["tool"], json["args"] || []]
+      rescue JSON::ParserError
         [nil, nil]
       end
     end

@@ -9,7 +9,13 @@ module Regent
       depends_on "gemini-ai"
 
       def invoke(messages, **args)
-        response = client.generate_content({ contents: format_messages(messages) })
+        response = client.generate_content({
+          contents: format_messages(messages),
+          generation_config: {
+            temperature: args[:temperature] || 0.0,
+            stop_sequences: args[:stop] || []
+          }
+        })
 
         result(
           model: model,

@@ -10,101 +10,12 @@ http_interactions:
         are an AI agent reasoning step-by-step to solve complex problems.\nYour reasoning
         process happens in a loop of Thought, Action, Observation.\nThought - a description
         of your thoughts about the question.\nAction - pick a an action from available
-        tools. If there are no tools that can help return an Answer saying you are
-        not able to help.\nObservation - is the result of running a tool.\nPAUSE -
-        is always present after an Action.\n\n## Available tools:\nprice_tool - Get
-        the price of cryptocurrencies\n\n## Example session\nQuestion: What is the
-        weather in London today?\nThought: I need to get current weather in London\nAction:
-        weather_tool | London\nPAUSE\n\nYou will have a response form a user with
-        Observation:\nObservation: It is 32 degress and Sunny\n\n... (this Thought/Action/Observation
-        can repeat N times)\n\nThought: I know the final answer\nAnswer: It is 32
-        degress and Sunny in London\n","model":"claude-3-5-sonnet-20240620","stop_sequences":["PAUSE"],"max_tokens":1000}'
-    headers:
-      X-Api-Key:
-      - "<ANTHROPIC_API_KEY>"
-      Anthropic-Version:
-      - '2023-06-01'
-      Content-Type:
-      - application/json
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Date:
-      - Sun, 29 Dec 2024 10:39:17 GMT
-      Content-Type:
-      - application/json
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Anthropic-Ratelimit-Requests-Limit:
-      - '50'
-      Anthropic-Ratelimit-Requests-Remaining:
-      - '49'
-      Anthropic-Ratelimit-Requests-Reset:
-      - '2024-12-29T10:39:17Z'
-      Anthropic-Ratelimit-Input-Tokens-Limit:
-      - '40000'
-      Anthropic-Ratelimit-Input-Tokens-Remaining:
-      - '40000'
-      Anthropic-Ratelimit-Input-Tokens-Reset:
-      - '2024-12-29T10:39:17Z'
-      Anthropic-Ratelimit-Output-Tokens-Limit:
-      - '8000'
-      Anthropic-Ratelimit-Output-Tokens-Remaining:
-      - '8000'
-      Anthropic-Ratelimit-Output-Tokens-Reset:
-      - '2024-12-29T10:39:17Z'
-      Anthropic-Ratelimit-Tokens-Limit:
-      - '48000'
-      Anthropic-Ratelimit-Tokens-Remaining:
-      - '48000'
-      Anthropic-Ratelimit-Tokens-Reset:
-      - '2024-12-29T10:39:17Z'
-      Request-Id:
-      - req_0171QwJhPspSzxFen5hytXp6
-      Via:
-      - 1.1 google
-      Cf-Cache-Status:
-      - DYNAMIC
-      X-Robots-Tag:
-      - none
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 8f992a4b3fa1ee3c-WAW
-    body:
-      encoding: ASCII-8BIT
-      string: '{"id":"msg_01ERTCGhNVEsPHmaBNJA8uve","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
-        To answer this question, I need to get the current price of Bitcoin. I can
-        use the price_tool to obtain this information.\n\nAction: price_tool | Bitcoin\n"}],"stop_reason":"stop_sequence","stop_sequence":"PAUSE","usage":{"input_tokens":249,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":41}}'
-  recorded_at: Sun, 29 Dec 2024 10:39:17 GMT
-- request:
-    method: post
-    uri: https://api.anthropic.com/v1/messages
-    body:
-      encoding: UTF-8
-      string: '{"messages":[{"role":"user","content":"What is the price of Bitcoin?"},{"role":"assistant","content":"Thought:
-        To answer this question, I need to get the current price of Bitcoin. I can
-        use the price_tool to obtain this information.\n\nAction: price_tool | Bitcoin\n"},{"role":"user","content":"Observation:
-        {''BTC'': ''$107,000'', ''ETH'': ''$6,000''}"}],"system":"## Instructions\nConsider
-        the following context: You are an AI agent\n\n\nYou are an AI agent reasoning
-        step-by-step to solve complex problems.\nYour reasoning process happens in
-        a loop of Thought, Action, Observation.\nThought - a description of your thoughts
-        about the question.\nAction - pick a an action from available tools. If there
-        are no tools that can help return an Answer saying you are not able to help.\nObservation
-        - is the result of running a tool.\nPAUSE - is always present after an Action.\n\n##
-        Available tools:\nprice_tool - Get the price of cryptocurrencies\n\n## Example
-        session\nQuestion: What is the weather in London today?\nThought: I need to
-        get current weather in London\nAction: weather_tool | London\nPAUSE\n\nYou
+        tools if required. If there are no tools that can help return an Answer saying
+        you are not able to help.\nObservation - is the result of running a tool.\nPAUSE
+        - a stop sequence that will always be present after an Action.\n\n## Available
+        tools:\nprice_tool - Get the price of cryptocurrencies\n\n## Example session\nQuestion:
+        What is the weather in London today?\nThought: I need to get current weather
+        in London\nAction: {\"tool\": \"weather_tool\", \"args\": [\"London\"]}\nPAUSE\n\nYou
         will have a response form a user with Observation:\nObservation: It is 32
         degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
         I know the final answer\nAnswer: It is 32 degress and Sunny in London\n","model":"claude-3-5-sonnet-20240620","stop_sequences":["PAUSE"],"max_tokens":1000}'
@@ -127,7 +38,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sun, 29 Dec 2024 10:39:19 GMT
+      - Sat, 04 Jan 2025 17:45:43 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -139,27 +50,27 @@ http_interactions:
       Anthropic-Ratelimit-Requests-Remaining:
       - '49'
       Anthropic-Ratelimit-Requests-Reset:
-      - '2024-12-29T10:39:18Z'
+      - '2025-01-04T17:45:42Z'
       Anthropic-Ratelimit-Input-Tokens-Limit:
       - '40000'
       Anthropic-Ratelimit-Input-Tokens-Remaining:
       - '40000'
       Anthropic-Ratelimit-Input-Tokens-Reset:
-      - '2024-12-29T10:39:19Z'
+      - '2025-01-04T17:45:43Z'
       Anthropic-Ratelimit-Output-Tokens-Limit:
       - '8000'
       Anthropic-Ratelimit-Output-Tokens-Remaining:
       - '8000'
       Anthropic-Ratelimit-Output-Tokens-Reset:
-      - '2024-12-29T10:39:19Z'
+      - '2025-01-04T17:45:43Z'
       Anthropic-Ratelimit-Tokens-Limit:
       - '48000'
       Anthropic-Ratelimit-Tokens-Remaining:
       - '48000'
       Anthropic-Ratelimit-Tokens-Reset:
-      - '2024-12-29T10:39:19Z'
+      - '2025-01-04T17:45:43Z'
       Request-Id:
-      - req_0157QBA27Dqa59oT5f5K2K3t
+      - req_01UxpGFsmMjAs9Lto7bLGrDA
       Via:
       - 1.1 google
       Cf-Cache-Status:
@@ -169,14 +80,106 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 8f992a55585d01ee-WAW
+      - 8fcd0b31ff66bfda-WAW
     body:
       encoding: ASCII-8BIT
-      string: '{"id":"msg_01QfxzXr3xHGWwZeD2sKtspK","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
-        I have received the price information for Bitcoin (BTC) and Ethereum (ETH).
-        The question specifically asked about Bitcoin, so I''ll focus on that.\n\nAnswer:
-        The current price of Bitcoin (BTC) is $107,000."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":315,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":57}}'
-  recorded_at: Sun, 29 Dec 2024 10:39:19 GMT
+      string: '{"id":"msg_01JEhxSJTgCqTRJHLptiVaXk","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
+        To answer this question, I need to get the current price of Bitcoin. I can
+        use the price_tool to obtain this information.\n\nAction: {\"tool\": \"price_tool\",
+        \"args\": [\"Bitcoin\"]}\n"}],"stop_reason":"stop_sequence","stop_sequence":"PAUSE","usage":{"input_tokens":266,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":51}}'
+  recorded_at: Sat, 04 Jan 2025 17:45:43 GMT
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: UTF-8
+      string: '{"messages":[{"role":"user","content":"What is the price of Bitcoin?"},{"role":"assistant","content":"Thought:
+        To answer this question, I need to get the current price of Bitcoin. I can
+        use the price_tool to obtain this information.\n\nAction: {\"tool\": \"price_tool\",
+        \"args\": [\"Bitcoin\"]}\n"},{"role":"user","content":"Observation: {''BTC'':
+        ''$107,000'', ''ETH'': ''$6,000''}"}],"system":"## Instructions\nConsider
+        the following context: You are an AI agent\n\n\nYou are an AI agent reasoning
+        step-by-step to solve complex problems.\nYour reasoning process happens in
+        a loop of Thought, Action, Observation.\nThought - a description of your thoughts
+        about the question.\nAction - pick a an action from available tools if required.
+        If there are no tools that can help return an Answer saying you are not able
+        to help.\nObservation - is the result of running a tool.\nPAUSE - a stop sequence
+        that will always be present after an Action.\n\n## Available tools:\nprice_tool
+        - Get the price of cryptocurrencies\n\n## Example session\nQuestion: What
+        is the weather in London today?\nThought: I need to get current weather in
+        London\nAction: {\"tool\": \"weather_tool\", \"args\": [\"London\"]}\nPAUSE\n\nYou
+        will have a response form a user with Observation:\nObservation: It is 32
+        degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
+        I know the final answer\nAnswer: It is 32 degress and Sunny in London\n","model":"claude-3-5-sonnet-20240620","stop_sequences":["PAUSE"],"max_tokens":1000}'
+    headers:
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 04 Jan 2025 17:45:45 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Anthropic-Ratelimit-Requests-Limit:
+      - '50'
+      Anthropic-Ratelimit-Requests-Remaining:
+      - '49'
+      Anthropic-Ratelimit-Requests-Reset:
+      - '2025-01-04T17:45:44Z'
+      Anthropic-Ratelimit-Input-Tokens-Limit:
+      - '40000'
+      Anthropic-Ratelimit-Input-Tokens-Remaining:
+      - '40000'
+      Anthropic-Ratelimit-Input-Tokens-Reset:
+      - '2025-01-04T17:45:45Z'
+      Anthropic-Ratelimit-Output-Tokens-Limit:
+      - '8000'
+      Anthropic-Ratelimit-Output-Tokens-Remaining:
+      - '8000'
+      Anthropic-Ratelimit-Output-Tokens-Reset:
+      - '2025-01-04T17:45:45Z'
+      Anthropic-Ratelimit-Tokens-Limit:
+      - '48000'
+      Anthropic-Ratelimit-Tokens-Remaining:
+      - '48000'
+      Anthropic-Ratelimit-Tokens-Reset:
+      - '2025-01-04T17:45:45Z'
+      Request-Id:
+      - req_015X4c7CAfhiMwoyVSZTVfDG
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      X-Robots-Tag:
+      - none
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8fcd0b3e8ec2eebf-WAW
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msg_01CtqW1XJ9q7DGaPwoSJmq3i","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
+        I have received the current price information for Bitcoin (BTC) and Ethereum
+        (ETH). The question specifically asked for the price of Bitcoin, so I''ll
+        focus on that information.\n\nAnswer: The current price of Bitcoin (BTC) is $107,000."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":342,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":58}}'
+  recorded_at: Sat, 04 Jan 2025 17:45:45 GMT
 - request:
     method: post
     uri: https://api.anthropic.com/v1/messages
@@ -187,103 +190,12 @@ http_interactions:
         are an AI agent reasoning step-by-step to solve complex problems.\nYour reasoning
         process happens in a loop of Thought, Action, Observation.\nThought - a description
         of your thoughts about the question.\nAction - pick a an action from available
-        tools. If there are no tools that can help return an Answer saying you are
-        not able to help.\nObservation - is the result of running a tool.\nPAUSE -
-        is always present after an Action.\n\n## Available tools:\nprice_tool - Get
-        the price of cryptocurrencies\n\n## Example session\nQuestion: What is the
-        weather in London today?\nThought: I need to get current weather in London\nAction:
-        weather_tool | London\nPAUSE\n\nYou will have a response form a user with
-        Observation:\nObservation: It is 32 degress and Sunny\n\n... (this Thought/Action/Observation
-        can repeat N times)\n\nThought: I know the final answer\nAnswer: It is 32
-        degress and Sunny in London\n","model":"claude-3-5-sonnet-20240620","stop_sequences":["PAUSE"],"max_tokens":1000}'
-    headers:
-      X-Api-Key:
-      - "<ANTHROPIC_API_KEY>"
-      Anthropic-Version:
-      - '2023-06-01'
-      Content-Type:
-      - application/json
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Date:
-      - Sun, 29 Dec 2024 10:39:20 GMT
-      Content-Type:
-      - application/json
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Anthropic-Ratelimit-Requests-Limit:
-      - '50'
-      Anthropic-Ratelimit-Requests-Remaining:
-      - '49'
-      Anthropic-Ratelimit-Requests-Reset:
-      - '2024-12-29T10:39:20Z'
-      Anthropic-Ratelimit-Input-Tokens-Limit:
-      - '40000'
-      Anthropic-Ratelimit-Input-Tokens-Remaining:
-      - '40000'
-      Anthropic-Ratelimit-Input-Tokens-Reset:
-      - '2024-12-29T10:39:20Z'
-      Anthropic-Ratelimit-Output-Tokens-Limit:
-      - '8000'
-      Anthropic-Ratelimit-Output-Tokens-Remaining:
-      - '8000'
-      Anthropic-Ratelimit-Output-Tokens-Reset:
-      - '2024-12-29T10:39:20Z'
-      Anthropic-Ratelimit-Tokens-Limit:
-      - '48000'
-      Anthropic-Ratelimit-Tokens-Remaining:
-      - '48000'
-      Anthropic-Ratelimit-Tokens-Reset:
-      - '2024-12-29T10:39:20Z'
-      Request-Id:
-      - req_01QuxwBZNYSBSUfD4Sjp18Ls
-      Via:
-      - 1.1 google
-      Cf-Cache-Status:
-      - DYNAMIC
-      X-Robots-Tag:
-      - none
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 8f992a63997cef97-WAW
-    body:
-      encoding: ASCII-8BIT
-      string: '{"id":"msg_01EiR481cvTjmppNPgtH48we","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
-        To answer this question about the price of Ethereum, I need to use the price
-        tool to get the current price information for Ethereum cryptocurrency.\n\nAction:
-        price_tool | Ethereum\n"}],"stop_reason":"stop_sequence","stop_sequence":"PAUSE","usage":{"input_tokens":250,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":44}}'
-  recorded_at: Sun, 29 Dec 2024 10:39:20 GMT
-- request:
-    method: post
-    uri: https://api.anthropic.com/v1/messages
-    body:
-      encoding: UTF-8
-      string: '{"messages":[{"role":"user","content":"What is the price of Ethereum?"},{"role":"assistant","content":"Thought:
-        To answer this question about the price of Ethereum, I need to use the price
-        tool to get the current price information for Ethereum cryptocurrency.\n\nAction:
-        price_tool | Ethereum\n"},{"role":"user","content":"Observation: {''BTC'':
-        ''$107,000'', ''ETH'': ''$6,000''}"}],"system":"## Instructions\nConsider
-        the following context: You are an AI agent\n\n\nYou are an AI agent reasoning
-        step-by-step to solve complex problems.\nYour reasoning process happens in
-        a loop of Thought, Action, Observation.\nThought - a description of your thoughts
-        about the question.\nAction - pick a an action from available tools. If there
-        are no tools that can help return an Answer saying you are not able to help.\nObservation
-        - is the result of running a tool.\nPAUSE - is always present after an Action.\n\n##
-        Available tools:\nprice_tool - Get the price of cryptocurrencies\n\n## Example
-        session\nQuestion: What is the weather in London today?\nThought: I need to
-        get current weather in London\nAction: weather_tool | London\nPAUSE\n\nYou
+        tools if required. If there are no tools that can help return an Answer saying
+        you are not able to help.\nObservation - is the result of running a tool.\nPAUSE
+        - a stop sequence that will always be present after an Action.\n\n## Available
+        tools:\nprice_tool - Get the price of cryptocurrencies\n\n## Example session\nQuestion:
+        What is the weather in London today?\nThought: I need to get current weather
+        in London\nAction: {\"tool\": \"weather_tool\", \"args\": [\"London\"]}\nPAUSE\n\nYou
         will have a response form a user with Observation:\nObservation: It is 32
         degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
         I know the final answer\nAnswer: It is 32 degress and Sunny in London\n","model":"claude-3-5-sonnet-20240620","stop_sequences":["PAUSE"],"max_tokens":1000}'
@@ -306,7 +218,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sun, 29 Dec 2024 10:39:23 GMT
+      - Sat, 04 Jan 2025 17:45:47 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -318,27 +230,27 @@ http_interactions:
       Anthropic-Ratelimit-Requests-Remaining:
       - '49'
       Anthropic-Ratelimit-Requests-Reset:
-      - '2024-12-29T10:39:22Z'
+      - '2025-01-04T17:45:46Z'
       Anthropic-Ratelimit-Input-Tokens-Limit:
       - '40000'
       Anthropic-Ratelimit-Input-Tokens-Remaining:
       - '40000'
       Anthropic-Ratelimit-Input-Tokens-Reset:
-      - '2024-12-29T10:39:23Z'
+      - '2025-01-04T17:45:47Z'
       Anthropic-Ratelimit-Output-Tokens-Limit:
       - '8000'
       Anthropic-Ratelimit-Output-Tokens-Remaining:
       - '8000'
       Anthropic-Ratelimit-Output-Tokens-Reset:
-      - '2024-12-29T10:39:23Z'
+      - '2025-01-04T17:45:47Z'
       Anthropic-Ratelimit-Tokens-Limit:
       - '48000'
       Anthropic-Ratelimit-Tokens-Remaining:
       - '48000'
       Anthropic-Ratelimit-Tokens-Reset:
-      - '2024-12-29T10:39:23Z'
+      - '2025-01-04T17:45:47Z'
       Request-Id:
-      - req_01P7LtCisAUhmwi7DrPsS3VR
+      - req_01NBs3DhuVT3UFKsFTRukSmV
       Via:
       - 1.1 google
       Cf-Cache-Status:
@@ -348,12 +260,105 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 8f992a6b3e27eece-WAW
+      - 8fcd0b4ab960b197-WAW
     body:
       encoding: ASCII-8BIT
-      string: '{"id":"msg_01R8A5DkhhbSJGFz6JmQmvco","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
-        The price tool has provided the current price information for Ethereum (ETH)
-        along with Bitcoin (BTC). I can now answer the question about Ethereum''s
-        price.\n\nAnswer: The current price of Ethereum (ETH) is $6,000."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":319,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":60}}'
-  recorded_at: Sun, 29 Dec 2024 10:39:23 GMT
+      string: '{"id":"msg_01PaPmoEzM8x2BCTAFjb4VKa","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
+        To answer this question, I need to get the current price of Ethereum. I can
+        use the price_tool to obtain this information.\n\nAction: {\"tool\": \"price_tool\",
+        \"args\": [\"Ethereum\"]}\n"}],"stop_reason":"stop_sequence","stop_sequence":"PAUSE","usage":{"input_tokens":267,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":53}}'
+  recorded_at: Sat, 04 Jan 2025 17:45:47 GMT
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: UTF-8
+      string: '{"messages":[{"role":"user","content":"What is the price of Ethereum?"},{"role":"assistant","content":"Thought:
+        To answer this question, I need to get the current price of Ethereum. I can
+        use the price_tool to obtain this information.\n\nAction: {\"tool\": \"price_tool\",
+        \"args\": [\"Ethereum\"]}\n"},{"role":"user","content":"Observation: {''BTC'':
+        ''$107,000'', ''ETH'': ''$6,000''}"}],"system":"## Instructions\nConsider
+        the following context: You are an AI agent\n\n\nYou are an AI agent reasoning
+        step-by-step to solve complex problems.\nYour reasoning process happens in
+        a loop of Thought, Action, Observation.\nThought - a description of your thoughts
+        about the question.\nAction - pick a an action from available tools if required.
+        If there are no tools that can help return an Answer saying you are not able
+        to help.\nObservation - is the result of running a tool.\nPAUSE - a stop sequence
+        that will always be present after an Action.\n\n## Available tools:\nprice_tool
+        - Get the price of cryptocurrencies\n\n## Example session\nQuestion: What
+        is the weather in London today?\nThought: I need to get current weather in
+        London\nAction: {\"tool\": \"weather_tool\", \"args\": [\"London\"]}\nPAUSE\n\nYou
+        will have a response form a user with Observation:\nObservation: It is 32
+        degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
+        I know the final answer\nAnswer: It is 32 degress and Sunny in London\n","model":"claude-3-5-sonnet-20240620","stop_sequences":["PAUSE"],"max_tokens":1000}'
+    headers:
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 04 Jan 2025 17:45:49 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Anthropic-Ratelimit-Requests-Limit:
+      - '50'
+      Anthropic-Ratelimit-Requests-Remaining:
+      - '49'
+      Anthropic-Ratelimit-Requests-Reset:
+      - '2025-01-04T17:45:48Z'
+      Anthropic-Ratelimit-Input-Tokens-Limit:
+      - '40000'
+      Anthropic-Ratelimit-Input-Tokens-Remaining:
+      - '40000'
+      Anthropic-Ratelimit-Input-Tokens-Reset:
+      - '2025-01-04T17:45:48Z'
+      Anthropic-Ratelimit-Output-Tokens-Limit:
+      - '8000'
+      Anthropic-Ratelimit-Output-Tokens-Remaining:
+      - '8000'
+      Anthropic-Ratelimit-Output-Tokens-Reset:
+      - '2025-01-04T17:45:48Z'
+      Anthropic-Ratelimit-Tokens-Limit:
+      - '48000'
+      Anthropic-Ratelimit-Tokens-Remaining:
+      - '48000'
+      Anthropic-Ratelimit-Tokens-Reset:
+      - '2025-01-04T17:45:48Z'
+      Request-Id:
+      - req_01RyJ4HCtrWL3FzRtqk5GqcD
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      X-Robots-Tag:
+      - none
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8fcd0b56a9ac0278-WAW
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msg_01K1sxhhMLjTWucTxKH9AvJX","type":"message","role":"assistant","model":"claude-3-5-sonnet-20240620","content":[{"type":"text","text":"Thought:
+        I have received the price information for Ethereum (ETH) along with Bitcoin
+        (BTC). The price tool provided the current prices for both cryptocurrencies.
+        I can now answer the question about Ethereum''s price.\n\nAnswer: The current
+        price of Ethereum (ETH) is $6,000."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":345,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":70}}'
+  recorded_at: Sat, 04 Jan 2025 17:45:48 GMT
 recorded_with: VCR 6.3.1

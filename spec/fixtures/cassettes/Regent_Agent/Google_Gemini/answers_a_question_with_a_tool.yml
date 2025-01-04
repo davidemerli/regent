@@ -11,15 +11,15 @@ http_interactions:
         a loop of Thought, Action, Observation.\nThought - a description of your thoughts
         about the question.\nAction - pick a an action from available tools if required.
         If there are no tools that can help return an Answer saying you are not able
-        to help.\nObservation - is the result of running a tool.\nPAUSE - is always
-        present after an Action.\n\n## Available tools:\nprice_tool - Get the price
-        of cryptocurrencies\n\n## Example session\nQuestion: What is the weather in
-        London today?\nThought: I need to get current weather in London\nAction: weather_tool
-        | London\nPAUSE\n\nYou will have a response form a user with Observation:\nObservation:
-        It is 32 degress and Sunny\n\n... (this Thought/Action/Observation can repeat
-        N times)\n\nThought: I know the final answer\nAnswer: It is 32 degress and
-        Sunny in London\n"}]},{"role":"user","parts":[{"text":"What is the price of
-        Bitcoin?"}]}]}'
+        to help.\nObservation - is the result of running a tool.\nPAUSE - a stop sequence
+        that will always be present after an Action.\n\n## Available tools:\nprice_tool
+        - Get the price of cryptocurrencies\n\n## Example session\nQuestion: What
+        is the weather in London today?\nThought: I need to get current weather in
+        London\nAction: {\"tool\": \"weather_tool\", \"args\": [\"London\"]}\nPAUSE\n\nYou
+        will have a response form a user with Observation:\nObservation: It is 32
+        degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
+        I know the final answer\nAnswer: It is 32 degress and Sunny in London\n"}]},{"role":"user","parts":[{"text":"What
+        is the price of Bitcoin?"}]}],"generation_config":{"temperature":0.0,"stop_sequences":["PAUSE"]}}'
     headers:
       User-Agent:
       - Faraday v2.12.2
@@ -41,11 +41,11 @@ http_interactions:
       Content-Encoding:
       - gzip
       Date:
-      - Sun, 29 Dec 2024 10:50:38 GMT
+      - Sat, 04 Jan 2025 17:59:10 GMT
       Server:
       - scaffolding on HTTPServer2
       Content-Length:
-      - '295'
+      - '313'
       X-Xss-Protection:
       - '0'
       X-Frame-Options:
@@ -53,7 +53,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Server-Timing:
-      - gfet4t7; dur=1557
+      - gfet4t7; dur=1767
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -65,23 +65,23 @@ http_interactions:
               "content": {
                 "parts": [
                   {
-                    "text": "Thought: I need to find the current price of Bitcoin.\nAction: price_tool | Bitcoin\nPAUSE\n"
+                    "text": "Thought: I need to get the current price of Bitcoin.\nAction: {\"tool\": \"price_tool\", \"args\": [\"Bitcoin\"]}\n"
                   }
                 ],
                 "role": "model"
               },
               "finishReason": "STOP",
-              "avgLogprobs": -0.086450483487999955
+              "avgLogprobs": -0.00097042558093865712
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 232,
-            "candidatesTokenCount": 23,
-            "totalTokenCount": 255
+            "promptTokenCount": 246,
+            "candidatesTokenCount": 30,
+            "totalTokenCount": 276
           },
           "modelVersion": "gemini-1.5-pro-002"
         }
-  recorded_at: Sun, 29 Dec 2024 10:50:38 GMT
+  recorded_at: Sat, 04 Jan 2025 17:59:10 GMT
 - request:
     method: post
     uri: https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=<GEMINI_API_KEY>
@@ -93,17 +93,18 @@ http_interactions:
         a loop of Thought, Action, Observation.\nThought - a description of your thoughts
         about the question.\nAction - pick a an action from available tools if required.
         If there are no tools that can help return an Answer saying you are not able
-        to help.\nObservation - is the result of running a tool.\nPAUSE - is always
-        present after an Action.\n\n## Available tools:\nprice_tool - Get the price
-        of cryptocurrencies\n\n## Example session\nQuestion: What is the weather in
-        London today?\nThought: I need to get current weather in London\nAction: weather_tool
-        | London\nPAUSE\n\nYou will have a response form a user with Observation:\nObservation:
-        It is 32 degress and Sunny\n\n... (this Thought/Action/Observation can repeat
-        N times)\n\nThought: I know the final answer\nAnswer: It is 32 degress and
-        Sunny in London\n"}]},{"role":"user","parts":[{"text":"What is the price of
-        Bitcoin?"}]},{"role":"assistant","parts":[{"text":"Thought: I need to find
-        the current price of Bitcoin.\nAction: price_tool | Bitcoin\nPAUSE"}]},{"role":"user","parts":[{"text":"Observation:
-        {''BTC'': ''$107,000'', ''ETH'': ''$6,000''}"}]}]}'
+        to help.\nObservation - is the result of running a tool.\nPAUSE - a stop sequence
+        that will always be present after an Action.\n\n## Available tools:\nprice_tool
+        - Get the price of cryptocurrencies\n\n## Example session\nQuestion: What
+        is the weather in London today?\nThought: I need to get current weather in
+        London\nAction: {\"tool\": \"weather_tool\", \"args\": [\"London\"]}\nPAUSE\n\nYou
+        will have a response form a user with Observation:\nObservation: It is 32
+        degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
+        I know the final answer\nAnswer: It is 32 degress and Sunny in London\n"}]},{"role":"user","parts":[{"text":"What
+        is the price of Bitcoin?"}]},{"role":"assistant","parts":[{"text":"Thought:
+        I need to get the current price of Bitcoin.\nAction: {\"tool\": \"price_tool\",
+        \"args\": [\"Bitcoin\"]}"}]},{"role":"user","parts":[{"text":"Observation:
+        {''BTC'': ''$107,000'', ''ETH'': ''$6,000''}"}]}],"generation_config":{"temperature":0.0,"stop_sequences":["PAUSE"]}}'
     headers:
       User-Agent:
       - Faraday v2.12.2
@@ -125,7 +126,7 @@ http_interactions:
       Content-Encoding:
       - gzip
       Date:
-      - Sun, 29 Dec 2024 10:50:39 GMT
+      - Sat, 04 Jan 2025 17:59:11 GMT
       Server:
       - scaffolding on HTTPServer2
       Content-Length:
@@ -137,7 +138,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Server-Timing:
-      - gfet4t7; dur=1077
+      - gfet4t7; dur=1113
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -155,17 +156,17 @@ http_interactions:
                 "role": "model"
               },
               "finishReason": "STOP",
-              "avgLogprobs": -0.00019146005312601724
+              "avgLogprobs": -0.00083029649599834722
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 280,
+            "promptTokenCount": 301,
             "candidatesTokenCount": 27,
-            "totalTokenCount": 307
+            "totalTokenCount": 328
           },
           "modelVersion": "gemini-1.5-pro-002"
         }
-  recorded_at: Sun, 29 Dec 2024 10:50:39 GMT
+  recorded_at: Sat, 04 Jan 2025 17:59:11 GMT
 - request:
     method: post
     uri: https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=<GEMINI_API_KEY>
@@ -177,15 +178,15 @@ http_interactions:
         a loop of Thought, Action, Observation.\nThought - a description of your thoughts
         about the question.\nAction - pick a an action from available tools if required.
         If there are no tools that can help return an Answer saying you are not able
-        to help.\nObservation - is the result of running a tool.\nPAUSE - is always
-        present after an Action.\n\n## Available tools:\nprice_tool - Get the price
-        of cryptocurrencies\n\n## Example session\nQuestion: What is the weather in
-        London today?\nThought: I need to get current weather in London\nAction: weather_tool
-        | London\nPAUSE\n\nYou will have a response form a user with Observation:\nObservation:
-        It is 32 degress and Sunny\n\n... (this Thought/Action/Observation can repeat
-        N times)\n\nThought: I know the final answer\nAnswer: It is 32 degress and
-        Sunny in London\n"}]},{"role":"user","parts":[{"text":"What is the price of
-        Ethereum?"}]}]}'
+        to help.\nObservation - is the result of running a tool.\nPAUSE - a stop sequence
+        that will always be present after an Action.\n\n## Available tools:\nprice_tool
+        - Get the price of cryptocurrencies\n\n## Example session\nQuestion: What
+        is the weather in London today?\nThought: I need to get current weather in
+        London\nAction: {\"tool\": \"weather_tool\", \"args\": [\"London\"]}\nPAUSE\n\nYou
+        will have a response form a user with Observation:\nObservation: It is 32
+        degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
+        I know the final answer\nAnswer: It is 32 degress and Sunny in London\n"}]},{"role":"user","parts":[{"text":"What
+        is the price of Ethereum?"}]}],"generation_config":{"temperature":0.0,"stop_sequences":["PAUSE"]}}'
     headers:
       User-Agent:
       - Faraday v2.12.2
@@ -207,11 +208,11 @@ http_interactions:
       Content-Encoding:
       - gzip
       Date:
-      - Sun, 29 Dec 2024 10:50:40 GMT
+      - Sat, 04 Jan 2025 17:59:12 GMT
       Server:
       - scaffolding on HTTPServer2
       Content-Length:
-      - '297'
+      - '311'
       X-Xss-Protection:
       - '0'
       X-Frame-Options:
@@ -219,7 +220,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Server-Timing:
-      - gfet4t7; dur=986
+      - gfet4t7; dur=1193
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -231,23 +232,23 @@ http_interactions:
               "content": {
                 "parts": [
                   {
-                    "text": "Thought: I need to get the current price of Ethereum.\nAction: price_tool | Ethereum\nPAUSE\n"
+                    "text": "Thought: I need to get the current price of Ethereum.\nAction: {\"tool\": \"price_tool\", \"args\": [\"Ethereum\"]}\n"
                   }
                 ],
                 "role": "model"
               },
               "finishReason": "STOP",
-              "avgLogprobs": -0.0087441717800886727
+              "avgLogprobs": -0.00477554053068161
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 232,
-            "candidatesTokenCount": 23,
-            "totalTokenCount": 255
+            "promptTokenCount": 246,
+            "candidatesTokenCount": 30,
+            "totalTokenCount": 276
           },
           "modelVersion": "gemini-1.5-pro-002"
         }
-  recorded_at: Sun, 29 Dec 2024 10:50:40 GMT
+  recorded_at: Sat, 04 Jan 2025 17:59:12 GMT
 - request:
     method: post
     uri: https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key=<GEMINI_API_KEY>
@@ -259,17 +260,18 @@ http_interactions:
         a loop of Thought, Action, Observation.\nThought - a description of your thoughts
         about the question.\nAction - pick a an action from available tools if required.
         If there are no tools that can help return an Answer saying you are not able
-        to help.\nObservation - is the result of running a tool.\nPAUSE - is always
-        present after an Action.\n\n## Available tools:\nprice_tool - Get the price
-        of cryptocurrencies\n\n## Example session\nQuestion: What is the weather in
-        London today?\nThought: I need to get current weather in London\nAction: weather_tool
-        | London\nPAUSE\n\nYou will have a response form a user with Observation:\nObservation:
-        It is 32 degress and Sunny\n\n... (this Thought/Action/Observation can repeat
-        N times)\n\nThought: I know the final answer\nAnswer: It is 32 degress and
-        Sunny in London\n"}]},{"role":"user","parts":[{"text":"What is the price of
-        Ethereum?"}]},{"role":"assistant","parts":[{"text":"Thought: I need to get
-        the current price of Ethereum.\nAction: price_tool | Ethereum\nPAUSE"}]},{"role":"user","parts":[{"text":"Observation:
-        {''BTC'': ''$107,000'', ''ETH'': ''$6,000''}"}]}]}'
+        to help.\nObservation - is the result of running a tool.\nPAUSE - a stop sequence
+        that will always be present after an Action.\n\n## Available tools:\nprice_tool
+        - Get the price of cryptocurrencies\n\n## Example session\nQuestion: What
+        is the weather in London today?\nThought: I need to get current weather in
+        London\nAction: {\"tool\": \"weather_tool\", \"args\": [\"London\"]}\nPAUSE\n\nYou
+        will have a response form a user with Observation:\nObservation: It is 32
+        degress and Sunny\n\n... (this Thought/Action/Observation can repeat N times)\n\nThought:
+        I know the final answer\nAnswer: It is 32 degress and Sunny in London\n"}]},{"role":"user","parts":[{"text":"What
+        is the price of Ethereum?"}]},{"role":"assistant","parts":[{"text":"Thought:
+        I need to get the current price of Ethereum.\nAction: {\"tool\": \"price_tool\",
+        \"args\": [\"Ethereum\"]}"}]},{"role":"user","parts":[{"text":"Observation:
+        {''BTC'': ''$107,000'', ''ETH'': ''$6,000''}"}]}],"generation_config":{"temperature":0.0,"stop_sequences":["PAUSE"]}}'
     headers:
       User-Agent:
       - Faraday v2.12.2
@@ -291,11 +293,11 @@ http_interactions:
       Content-Encoding:
       - gzip
       Date:
-      - Sun, 29 Dec 2024 10:50:41 GMT
+      - Sat, 04 Jan 2025 17:59:13 GMT
       Server:
       - scaffolding on HTTPServer2
       Content-Length:
-      - '287'
+      - '288'
       X-Xss-Protection:
       - '0'
       X-Frame-Options:
@@ -303,7 +305,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Server-Timing:
-      - gfet4t7; dur=1032
+      - gfet4t7; dur=1044
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -321,15 +323,15 @@ http_interactions:
                 "role": "model"
               },
               "finishReason": "STOP",
-              "avgLogprobs": -0.0002099161222577095
+              "avgLogprobs": -0.0011838728934526444
             }
           ],
           "usageMetadata": {
-            "promptTokenCount": 280,
+            "promptTokenCount": 301,
             "candidatesTokenCount": 25,
-            "totalTokenCount": 305
+            "totalTokenCount": 326
           },
           "modelVersion": "gemini-1.5-pro-002"
         }
-  recorded_at: Sun, 29 Dec 2024 10:50:41 GMT
+  recorded_at: Sat, 04 Jan 2025 17:59:13 GMT
 recorded_with: VCR 6.3.1

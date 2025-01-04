@@ -12,7 +12,7 @@ module Regent
           messages: messages,
           model: model,
           temperature: args[:temperature] || 0.0,
-          stop: args[:stop]
+          stop: args[:stop] || []
         })
 
         result(

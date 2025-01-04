@@ -15,8 +15,8 @@ module Regent
       raise NotImplementedError, "Tool #{name} has not implemented the execute method"
     end
 
-    def execute(argument)
-      call(argument)
+    def execute(*arguments)
+      call(*arguments)
     rescue NotImplementedError, StandardError => e
       raise ToolError, e.message
     end

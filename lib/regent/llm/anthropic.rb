@@ -13,7 +13,8 @@ module Regent
           messages: format_messages(messages),
           system: system_instruction(messages),
           model: model,
-          stop_sequences: args[:stop] ? args[:stop] : nil,
+          temperature: args[:temperature] || 0.0,
+          stop_sequences: args[:stop] || [],
           max_tokens: MAX_TOKENS
         })
 

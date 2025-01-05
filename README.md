@@ -30,7 +30,7 @@
 
 A basic Regnt Agent extended with a `price_tool` that allows for retrieving cryptocurrency prices from coingecko.com.
 
-![screencast 2024-12-25 21-53-47](https://github.com/user-attachments/assets/4e65b731-bbd7-4732-b157-b705d35a7824)
+![Screen_gif](https://github.com/user-attachments/assets/63c8c923-0c1e-48db-99f6-33758411623f)
 
 ## Quick Start
 

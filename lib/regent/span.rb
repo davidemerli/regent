@@ -85,9 +85,13 @@ module Regent
       result = yield
 
       @end_time = live ? Time.now.freeze : @end_time
+      update_message_with_result(result) if type == Type::TOOL_EXECUTION
       logger.success(label: type, **({ duration: duration.round(2), meta: meta }.merge(arguments)))
-
       result
+    end
+
+    def update_message_with_result(message)
+      arguments[:message] = "#{arguments[:message]} → #{message}"
     end
   end
 end

@@ -101,6 +101,45 @@ RSpec.describe Regent::Agent, :vcr do
         expect(agent.session.spans[3].type).to eq(Regent::Span::Type::LLM_CALL)
         expect(agent.session.spans.last.type).to eq(Regent::Span::Type::ANSWER)
       end
+
+      context "logging" do
+        before do
+          allow(TTY::Spinner).to receive(:new).and_return(spinner)
+        end
+
+        it "logs steps in the console" do
+          agent.run("What is the price of Bitcoin?")
+
+          # Input
+          expect(spinner).to have_received(:update).with(
+            title: /\[.*?INPUT.*?\].*?What is the price of Bitcoin\?/
+          ).exactly(2).times
+
+          # LLM Call
+          expect(spinner).to have_received(:update).with(
+            title: /\[.*?LLM.*?❯.*?gpt-4o-mini.*?\].*?What is the price of Bitcoin\?/
+          ).exactly(2).times
+
+          # Tool Execution - Initial call
+          expect(spinner).to have_received(:update).with(
+            title: /\[.*?TOOL.*?❯.*?price_tool.*?\].*?:.*?\["Bitcoin"\](?:\e\[0m)?$/
+          ).once
+
+          # Tool Execution - Result
+          expect(spinner).to have_received(:update).with(
+            title: /\[.*?TOOL.*?❯.*?price_tool.*?\[.*?0\.\d*s.*?\].*?:.*?\["Bitcoin"\] → {'BTC': '\$107,000', 'ETH': '\$6,000'}(?:\e\[0m)?/
+          ).once
+
+          expect(spinner).to have_received(:update).with(
+            title: /\[.*?LLM.*?❯.*?gpt-4o-mini.*?\].*?Observation:/
+          ).exactly(2).times
+
+          # Answer
+          expect(spinner).to have_received(:update).with(
+            title: /\[.*?ANSWER.*?❯.*?success.*?\].*?The price of Bitcoin is \$107,000\./
+          ).exactly(2).times
+        end
+      end
     end
   end
 

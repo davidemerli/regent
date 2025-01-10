@@ -11,7 +11,7 @@ module Regent
       super()
 
       @context = context
-      @model = model
+      @model = model.is_a?(Regent::LLM) ? model : Regent::LLM.new(model)
       @engine = engine
       @sessions = []
       @tools = build_toolchain(tools)

@@ -12,7 +12,7 @@
 
 **Regent** is a small and elegant Ruby framework for building AI agents that can think, reason, and take actions through tools. It provides a clean, intuitive interface for creating agents that can solve complex problems by breaking them down into logical steps.
 
-> [!WARNING]
+> [!NOTE]
 > Regent is currently an experiment intended to explore patterns for building easily traceable and debuggable AI agents of different architectures. It is not yet intended to be used in production and is currently in development.
 > 
 > Read more about Regent in a Medium article: [Building AI Agent from scratch with Ruby](https://medium.com/@alchaplinsky/building-ai-agent-from-scratch-with-ruby-a-practical-guide-6bc38af3dfcd)
@@ -54,34 +54,161 @@ bundle install
 
 ## Usage
 
-Create your first agent:
+### Quick Example
+
+Create your first weather agent:
 
 ```ruby
-# Initialize the LLM
-model = Regent::LLM.new("gpt-4o")
+# Define agent class
+class WeatherAgent < Regent::Agent
+  tool(:weather_tool, "Get current weather for a location")
 
-# Create a custom tool
-class WeatherTool < Regent::Tool
-  def call(location)
-    # Implement weather lookup logic
+  def weather_tool(location)
     "Currently 72°F and sunny in #{location}"
   end
 end
 
-# Create and configure the agent
-agent = Regent::Agent.new(
-  "You are a helpful weather assistant",
-  model: model,
-  tools: [WeatherTool.new(
-    name: "weather_tool",
-    description: "Get current weather for a location"
-  )]
-)
+# Instantiate an agent
+agent = WeatherAgent.new("You are a helpful weather assistant", model: "gpt-4o")
 
 # Execute a query
 agent.run("What's the weather like in Tokyo?") # => "It is currently 72°F and sunny in Tokyo."
 ```
 
+### LLMs
+Regent provides an interface for invoking an LLM through an instance of `Regent::LLM` class. Even though Agent initializer allows you to pass a modal name as a string, sometimes it is useful to create a model instance if you want to tune model params before passing it to the agent. Or if you need to invoke a model directly without passing it to an Agent you can do that by creating an instance of LLM class:
+
+```ruby
+model = Regent::LLM.new("gemini-1.5-flash")
+# or with options
+model = Regent::LLM.new("gemini-1.5-flash", temperature: 0.5) # supports options that are supported by the model
+```
+
+#### API keys
+By default, **Regent** will try to fetch API keys for corresponding models from environment variables. Make sure that the following ENV variables are set depending on your model choice:
+
+| Model series | ENV variable name   |
+|--------------|---------------------|
+| `gpt-`       | `OPENAI_API_KEY`    |
+| `gemini-`    | `GEMINI_API_KEY`    |
+| `claude-`    | `ANTHROPIC_API_KEY` |
+
+But you can also pass an `api_key` option to the` Regent::LLM` constructor should you need to override this behavior:
+
+```ruby
+model = Regent::LLM.new("gemini-1.5-flash", api_key: "AIza...")
+```
+
+> [!NOTE]
+> Currently **Regent** supports only `gpt-`, `gemini-` and `claude-` models series. But you can build, your custom model classes that conform to the Regent's interface and pass those instances to the Agent.
+
+#### Calling LLM
+Once your model is instantiated you can call the `invoke` method:
+
+```ruby
+model.invoke("Hello!") 
+```
+
+Alternatively, you can pass message history to the `invoke` method. Messages need to follow OpenAI's message format (eg. `{role: "user", content: "..."}`)
+
+```ruby
+model.invoke([
+  {role: "system", content: "You are a helpful assistant"},
+  {role: "user", content: "Hello!"}
+])
+```
+
+This method returns an instance of the `Regent::LLM::Result` class, giving access to the content or error and token usage stats.
+
+```ruby
+result = model.invoke("Hello!")
+
+result.content # => Hello there! How can I help you today?
+result.input_tokens # => 2
+result.output_tokens # => 11
+result.error # => nil
+```
+
+### Tools
+
+There are multiple ways how you can give agents tools for performing actions and retrieving additional information. First of all you can define a **function tool** directly on the agent class:
+
+```ruby
+class MyAgent < Regent::Agent
+  # define the tool by giving a unique name and description
+  tool :search_web, "Search for information on the web" 
+
+  def search_web(query)
+    # Implement tool logic within the method with the same name
+  end
+end
+```
+
+For more complex tools we can define a dedicated class with a `call` method that will get called. And then pass an instance of this tool to an agent:
+
+```ruby
+class SearchTool < Regent::Tool
+  def call(query)
+    # Implement tool logic
+  end
+end
+
+agent = Regent::Agent.new("Find information and answer any question", {
+  model: "gpt-4o",
+  tools: [SearchTool.new]
+})
+
+```
+
+### Agent
+
+**Agent** class is the core of the library. To crate an agent, you can use `Regent::Agent` class directly if you don't need to add any business logic. Or you can create your own class inheriting from `Regent::Agent`. To instantiate an agent you need to pass a **purpose** of an agent and a model it should use.
+
+```ruby
+agent = Regent::Agent.new("You are a helpful assistant", model: "gpt-4o-mini")
+```
+
+Additionally, you can pass a list of Tools to extend the agent's capabilities. Those should be instances of classes that inherit from `Regent::Tool` class:
+
+```ruby
+class SearchTool < Regent::Tool
+  def call
+    # make a call to search API
+  end
+end
+
+class CalculatorTool < Regent::Tool
+  def call
+    # perform calculations
+  end
+end
+
+tools = [SearchTool.new, CalculatorTool.new]
+
+agent = Regent::Agent.new("You are a helpful assistant", model: "gpt-4o-mini", tools: tools)
+```
+
+Each agent run creates a **session** that contains every operation that is performed by agent while working on a task. Sessions can be replayed and drilled down into while debugging.
+```ruby
+agent.sessions # => Returns all sessions performed by the agent
+agent.session # => Returns last session performed by the agent
+agent.session.result # => Returns result of latest agent run
+```
+
+While running agent logs all session spans (all operations) to the console with all sorts of useful information, that helps to understand what the agent was doing and why it took a certain path.
+```ruby
+weather_agent.run("What is the weather in San Francisco?")
+```
+
+Outputs:
+```console
+[✔] [INPUT][0.0s]: What is the weather in San Francisco?
+ ├──[✔] [LLM ❯ gpt-4o-mini][242 → 30 tokens][0.02s]: What is the weather in San Francisco?
+ ├──[✔] [TOOL ❯ get_weather][0.0s]: ["San Francisco"] → The weather in San Francisco is 70 degrees and sunny.
+ ├──[✔] [LLM ❯ gpt-4o-mini][294 → 26 tokens][0.01s]: Observation: The weather in San Francisco is 70 degrees and sunny.
+[✔] [ANSWER ❯ success][0.03s]: It is 70 degrees and sunny in San Francisco.
+```
+---
 ## Why Regent?
 
 - **Transparent Decision Making**: Watch your agent's thought process as it reasons through problems

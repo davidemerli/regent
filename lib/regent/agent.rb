@@ -3,6 +3,7 @@
 module Regent
   class Agent
     include Concerns::Identifiable
+    include Concerns::Toolable
 
     DEFAULT_MAX_ITERATIONS = 10
 
@@ -13,11 +14,11 @@ module Regent
       @model = model
       @engine = engine
       @sessions = []
-      @tools = tools.is_a?(Toolchain) ? tools : Toolchain.new(Array(tools))
+      @tools = build_toolchain(tools)
       @max_iterations = options[:max_iterations] || DEFAULT_MAX_ITERATIONS
     end
 
-    attr_reader :context, :sessions, :model, :tools
+    attr_reader :context, :sessions, :model, :tools, :inline_tools
 
     def run(task)
       raise ArgumentError, "Task cannot be empty" if task.to_s.strip.empty?
@@ -50,6 +51,18 @@ module Regent
 
     def complete_session
       session&.complete if running?
+    end
+
+    def build_toolchain(tools)
+      context = self
+
+      toolchain = Toolchain.new(Array(tools))
+
+      self.class.function_tools.each do |entry|
+        toolchain.add(entry, context)
+      end
+
+      toolchain
     end
 
     def engine

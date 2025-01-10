@@ -278,4 +278,36 @@ RSpec.describe Regent::Agent, :vcr do
       end
     end
   end
+
+  context "allows tools to be defined in the agent class" do
+    let(:model) { "gpt-4o-mini" }
+    let(:cassette) { "Regent_Agent/function_tools/answers_a_question_with_a_tool" }
+
+    context "with tool definition missing" do
+      subject { InvalidWeatherAgent.new("You are a weather tool", model: Regent::LLM.new(model))}
+      class InvalidWeatherAgent < Regent::Agent
+        tool(:get_weather, "Get the weather for a given location")
+      end
+
+      it "raises an error" do
+        expect{ subject }.to raise_error("A tool method 'get_weather' is missing in the InvalidWeatherAgent")
+      end
+    end
+
+    context "properly defined tool" do
+      let(:agent) { ValidWeatherAgent.new("You are a weather tool", model: Regent::LLM.new(model)) }
+
+      class ValidWeatherAgent < Regent::Agent
+        tool(:get_weather, "Get the weather for a given location")
+
+        def get_weather(location)
+          "The weather in #{location} is 70 degrees and sunny."
+        end
+      end
+
+      it "allows tools to be defined in the agent class" do
+        expect(agent.run("What is the weather in San Francisco?")).to eq("It is 70 degrees and sunny in San Francisco.")
+      end
+    end
+  end
 end

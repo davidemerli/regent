@@ -24,6 +24,9 @@ module Regent
 
     def invoke(messages, **args)
       retries = 0
+
+      messages = [{ role: "user", content: messages }] if messages.is_a?(String)
+
       provider.invoke(messages, **args)
 
     rescue Faraday::Error => error

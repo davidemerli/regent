@@ -188,7 +188,7 @@ tools = [SearchTool.new, CalculatorTool.new]
 agent = Regent::Agent.new("You are a helpful assistant", model: "gpt-4o-mini", tools: tools)
 ```
 
-Each agent run creates a **session** that contains every operation that is performed by agent while working on a task. Sessions can be replayed and drilled down into while debugging.
+Each agent run creates a **session** that contains every operation that is performed by the agent while working on a task. Sessions can be replayed and drilled down into while debugging.
 ```ruby
 agent.sessions # => Returns all sessions performed by the agent
 agent.session # => Returns last session performed by the agent
@@ -208,6 +208,29 @@ Outputs:
  ├──[✔] [LLM ❯ gpt-4o-mini][294 → 26 tokens][0.01s]: Observation: The weather in San Francisco is 70 degrees and sunny.
 [✔] [ANSWER ❯ success][0.03s]: It is 70 degrees and sunny in San Francisco.
 ```
+
+### Engine
+By default, Regent uses ReAct agent architecture. You can see the [details of its implementation](https://github.com/alchaplinsky/regent/blob/main/lib/regent/engine/react.rb). However, Agent constructor accepts an `engine` option that allows you to swap agent engine when instantiating an Agent. This way you can implement your own agent architecture that can be plugged in and user within Regent framework.
+
+```ruby
+agent = CustomAgent.new("You are a self-correcting assistant", model: "gpt-4o", engine: CustomEngine)
+```
+
+In order to implement your own engine you need to define a class that inherits from `Regent::Engine::Base` class and implements `reason` method:
+
+```ruby
+class CustomEngine < Regent::Engine::Base
+  def reason(task)
+    # Your implementation of an Agent lifecycle
+  end
+end
+```
+
+Note that Base class already handles `max_iteration` check, so you won't end up in an infinite loop. Also, it allows you to use `llm_call_response` and `tool_call_response` methods for agent reasoning as well as `success_answer` and `error_answer` for the final result.
+
+For any other operation that happens in your agent architecture that you want to track separately call it within the `session.exec` block. See examples in `Regent::Engine::Base` class.
+
+
 ---
 ## Why Regent?
 

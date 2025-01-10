@@ -236,8 +236,9 @@ For any other operation that happens in your agent architecture that you want to
 
 - **Transparent Decision Making**: Watch your agent's thought process as it reasons through problems
 - **Flexible Architecture**: Easy to extend with custom tools and adapt to different use cases
-- **Production Ready**: Built with tracing, error handling, and clean abstractions
 - **Ruby-First Design**: Takes advantage of Ruby's elegant syntax and conventions
+- **Transparent Execution**: Built with tracing, error handling, and clean abstractions
+
 
 ## Development
 

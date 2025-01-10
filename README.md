@@ -15,7 +15,7 @@
 > [!NOTE]
 > Regent is currently an experiment intended to explore patterns for building easily traceable and debuggable AI agents of different architectures. It is not yet intended to be used in production and is currently in development.
 > 
-> Read more about Regent in a Medium article: [Building AI Agent from scratch with Ruby](https://medium.com/@alchaplinsky/building-ai-agent-from-scratch-with-ruby-a-practical-guide-6bc38af3dfcd)
+> Read more about Regent in a Medium article: [Building AI Agent from scratch with Ruby](https://medium.com/towards-artificial-intelligence/building-ai-agent-from-scratch-with-ruby-c6260dad45b7)
 
 ## Key Features
 

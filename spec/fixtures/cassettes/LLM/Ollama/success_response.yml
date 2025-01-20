@@ -1,0 +1,36 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://localhost:11434/api/chat
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma","messages":[{"role":"user","content":"What is the
+        capital of Japan?"}],"stream":false}'
+    headers:
+      User-Agent:
+      - Faraday v2.12.2
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 20 Jan 2025 10:53:23 GMT
+      Content-Length:
+      - '451'
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma","created_at":"2025-01-20T10:53:23.717649Z","message":{"role":"assistant","content":"The
+        capital city of Japan is Tokyo.\n\nIt is the political, economic, and cultural
+        center of Japan and is known for its modern cityscape and traditional culture."},"done_reason":"stop","done":true,"total_duration":2949346250,"load_duration":613586833,"prompt_eval_count":29,"prompt_eval_duration":1952000000,"eval_count":33,"eval_duration":382000000}'
+  recorded_at: Mon, 20 Jan 2025 10:53:23 GMT
+recorded_with: VCR 6.3.1

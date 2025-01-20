@@ -12,6 +12,8 @@ module Regent
         @options = options
       end
 
+      attr_reader :model
+
       def invoke(messages, **args)
         response = client.post("/api/chat", {
           model: model,
@@ -19,12 +21,20 @@ module Regent
           stream: false
         })
 
-        result(
-          model: response.body.dig("model"),
-          content: response.body.dig("message", "content").strip,
-          input_tokens: nil,
-          output_tokens: nil
-        )
+        if response.status == 200
+          result(
+            model: response.body.dig("model"),
+            content: response.body.dig("message", "content").strip,
+            input_tokens: nil,
+            output_tokens: nil
+          )
+        else
+          raise ApiError, response.body.dig("error")
+        end
+      end
+
+      def parse_error(error)
+        error.message
       end
 
       private

@@ -9,14 +9,18 @@ module Regent
       depends_on "anthropic"
 
       def invoke(messages, **args)
-        response = client.messages(parameters: {
+        parameters = {
           messages: format_messages(messages),
-          system: system_instruction(messages),
           model: model,
           temperature: args[:temperature] || 0.0,
           stop_sequences: args[:stop] || [],
           max_tokens: MAX_TOKENS
-        })
+        }
+        if system_instruction = system_instruction(messages)
+          parameters[:system] = system_instruction
+        end
+
+        response = client.messages(parameters:)
 
         result(
           model: model,

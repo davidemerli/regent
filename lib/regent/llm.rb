@@ -14,10 +14,15 @@ module Regent
     class ApiError < StandardError; end
 
     def initialize(model, strict_mode: true, **options)
-      @model = model
       @strict_mode = strict_mode
       @options = options
-      instantiate_provider
+      if model.class.ancestors.include?(Regent::LLM::Base)
+        @model = model.model
+        @provider = model
+      else
+        @model = model
+        @provider = instantiate_provider
+      end
     end
 
     attr_reader :model, :options
@@ -29,7 +34,7 @@ module Regent
 
       provider.invoke(messages, **args)
 
-    rescue Faraday::Error => error
+    rescue Faraday::Error, ApiError => error
       if error.respond_to?(:retryable?) && error.retryable? && retries < DEFAULT_RETRY_COUNT
         sleep(exponential_backoff(retries))
         retry
@@ -45,7 +50,7 @@ module Regent
       provider_class = find_provider_class
       raise ProviderNotFoundError, "Provider for #{model} is not found" if provider_class.nil?
 
-      @provider ||= create_provider(provider_class)
+      create_provider(provider_class)
     end
 
     def find_provider_class

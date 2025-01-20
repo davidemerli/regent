@@ -52,7 +52,7 @@ module Regent
 
       # Complete a session with a success answer
       def success_answer(content)
-        session.exec(Span::Type::ANSWER, top_level: true,type: :success, message: content, duration: session.duration.round(2)) { content }
+        session.exec(Span::Type::ANSWER, top_level: true, type: :success, message: content, duration: session.duration.round(2)) { content }
       end
 
       # Complete a session with an error answer

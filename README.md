@@ -100,7 +100,7 @@ model = Regent::LLM.new("gemini-1.5-flash", api_key: "AIza...")
 ```
 
 > [!NOTE]
-> Currently **Regent** supports only `gpt-`, `gemini-` and `claude-` models series. But you can build, your custom model classes that conform to the Regent's interface and pass those instances to the Agent.
+> Currently **Regent** supports only `gpt-`, `gemini-` and `claude-` models series and local **ollama** models. But you can build, your custom model classes that conform to the Regent's interface and pass those instances to the Agent.
 
 #### Calling LLM
 Once your model is instantiated you can call the `invoke` method:

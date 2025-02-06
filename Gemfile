@@ -15,6 +15,7 @@ gem "http", "~> 5.1"
 
 gem "anthropic"
 gem "gemini-ai"
+gem "open_router"
 
 group :test do
   gem "vcr", "~> 6.2"

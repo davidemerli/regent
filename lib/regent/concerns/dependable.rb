@@ -38,14 +38,14 @@ module Regent
 
       def load_dependency(name)
         gem(name)
-
-        return true unless defined? Bundler
-
         gem_spec = Gem::Specification.find_by_name(name)
-        gem_requirement = dependencies.find { |gem| gem.name == gem_spec.name }.requirement
 
-        unless gem_requirement.satisfied_by?(gem_spec.version)
-          raise VersionError, version_error(gem_spec, gem_requirement)
+        if defined?(Bundler)
+          gem_requirement = dependencies.find { |gem| gem.name == gem_spec.name }.requirement
+
+          unless gem_requirement.satisfied_by?(gem_spec.version)
+            raise VersionError, version_error(gem_spec, gem_requirement)
+          end
         end
 
         require_gem(gem_spec)

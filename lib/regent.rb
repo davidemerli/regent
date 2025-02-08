@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'securerandom'
-require 'faraday'
 require 'json'
+require 'faraday'
 require 'pastel'
 require 'tty-spinner'
 require 'zeitwerk'

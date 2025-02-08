@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    regent (0.3.3)
+    regent (0.3.4)
       faraday (~> 2.12)
       pastel (~> 0.8.0)
       tty-spinner (~> 0.9.3)

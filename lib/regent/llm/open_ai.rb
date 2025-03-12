@@ -8,12 +8,14 @@ module Regent
       depends_on "ruby-openai"
 
       def invoke(messages, **args)
-        response = client.chat(parameters: {
+        parameters = {
           messages: messages,
           model: model,
-          temperature: args[:temperature] || 0.0,
-          stop: args[:stop] || []
-        })
+          temperature: args.keys.include?(:temperature) ? args[:temperature] : 0.0,
+          stop: args.keys.include?(:stop) ? args[:stop] : []
+        }.compact
+
+        response = client.chat(parameters: parameters)
 
         result(
           model: model,

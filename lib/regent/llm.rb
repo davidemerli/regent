@@ -13,7 +13,7 @@ module Regent
     class APIKeyNotFoundError < StandardError; end
     class ApiError < StandardError; end
 
-    def initialize(model, strict_mode: true, **options)
+    def initialize(model, strict_mode: true, provider: nil, **options)
       @strict_mode = strict_mode
       @options = options
       if model.class.ancestors.include?(Regent::LLM::Base)
@@ -21,7 +21,7 @@ module Regent
         @provider = model
       else
         @model = model
-        @provider = instantiate_provider
+        @provider = provider ? create_provider(provider) : instantiate_provider
       end
     end
 
@@ -32,8 +32,7 @@ module Regent
 
       messages = [{ role: "user", content: messages }] if messages.is_a?(String)
 
-      provider.invoke(messages, **args)
-
+      provider.invoke(messages, **options.merge(args))
     rescue Faraday::Error, ApiError => error
       if error.respond_to?(:retryable?) && error.retryable? && retries < DEFAULT_RETRY_COUNT
         sleep(exponential_backoff(retries))
